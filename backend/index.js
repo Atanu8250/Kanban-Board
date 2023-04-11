@@ -4,17 +4,28 @@ require("dotenv").config();
 
 const connectDB = require("./config/db");
 const authRouter = require("./routes/auth.routes");
+const authCheck = require("./middlewares/auth.middleware");
+const boardRouter = require("./routes/board.routes");
+const taskRouter = require("./routes/task.routes");
+const subTaskRouter = require("./routes/subTask.routes");
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
      res.send("Welcome to Kanban-board's API Home page...")
 })
 
 app.use("/", authRouter);
+
+app.use(authCheck);
+
+app.use('/board', boardRouter);
+app.use('/task', taskRouter);
+app.use('/subtask', subTaskRouter);
+
 
 app.listen(process.env.PORT ?? 8080, async () => {
      try {

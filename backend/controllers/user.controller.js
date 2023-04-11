@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-const userLogin = async (req, res) => {
+const userSignin = async (req, res) => {
      const { email, password } = req.body;
      try {
           const matchedUser = await UserModel.findOne({ email });
@@ -11,9 +11,9 @@ const userLogin = async (req, res) => {
                bcrypt.compare(password, matchedUser._doc.password, function (err, result) {
                     if (result) {
                          const token = jwt.sign({
-                              email
+                              userId: matchedUser._doc._id,
                          }, process.env.SECRET_KEY, { expiresIn: '24h' });
-                         res.status(200).send({ message: "Login success", user: { ...matchedUser._doc, token } });
+                         res.status(200).send({ message: "Login successful", user: { ...matchedUser._doc, token } });
                     } else {
                          res.status(400).send({ message: "Wrong Password!" })
                     }
@@ -31,7 +31,7 @@ const userLogin = async (req, res) => {
 
 
 const userSignUp = async (req, res) => {
-     const { email, password } = req.body;
+     const { username, email, password } = req.body;
 
      try {
           const matchedUsers = await UserModel.find({ email });
@@ -46,11 +46,19 @@ const userSignUp = async (req, res) => {
                               message: "error in bcrypt"
                          });
                     } else {
-                         const user = new UserModel({ email, password: hash });
-                         await user.save();
-                         res.status(201).send({
-                              message: "Sign-up Sccess"
-                         })
+                         try {
+                              const user = new UserModel({ username, email, password: hash });
+                              await user.save();
+                              res.status(201).send({
+                                   message: "Sign-up Sccessful"
+                              })
+                         } catch (error) {
+                              res.status(400).send({
+                                   message: error.message,
+                                   error: error
+                              });
+                              console.log('error:', error)
+                         }
                     }
                });
           }
@@ -62,4 +70,4 @@ const userSignUp = async (req, res) => {
      }
 }
 
-module.exports = { userLogin, userSignUp };
+module.exports = { userSignin, userSignUp };
