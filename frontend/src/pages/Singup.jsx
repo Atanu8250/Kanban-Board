@@ -13,12 +13,15 @@ import {
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
+import { signup } from '../redux/auth/auth.actions';
+import useToastMsg from '../customHooks/useToastMsg';
 
 function Singup() {
 
      const dispatch = useDispatch()
      const { loading } = useSelector(store => store.authManager);
 
+     const toastMsg = useToastMsg()
      const [showPassword, setShowPassword] = useState(false)
      const userNameRef = useRef();
      const emailRef = useRef()
@@ -32,7 +35,7 @@ function Singup() {
                password: pwdRef.current.value,
           }
 
-          // dispatch((user));
+          dispatch(signup(user, toastMsg));
           userNameRef.current.value = "";
           emailRef.current.value = "";
           pwdRef.current.value = "";

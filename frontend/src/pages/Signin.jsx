@@ -13,12 +13,15 @@ import {
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
+import { signin } from '../redux/auth/auth.actions';
+import useToastMsg from '../customHooks/useToastMsg';
 
 function Signin() {
 
      const dispatch = useDispatch();
      const { loading } = useSelector(store => store.authManager);
      const [showPassword, setShowPassword] = useState(false);
+     const toastMsg = useToastMsg()
 
      const emailRef = useRef()
      const pwdRef = useRef()
@@ -29,7 +32,7 @@ function Signin() {
                password: pwdRef.current.value
           }
 
-          // dispatch((user));
+          dispatch(signin(user, toastMsg));
           emailRef.current.value = "";
           pwdRef.current.value = "";
 

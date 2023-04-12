@@ -24,10 +24,12 @@ export const reducer = (state = initialState, { type, payload }) => {
           }
 
           case authTypes.AUTH_LOGIN_SUCCESS: {
+               sessionStorage.setItem("TOKEN", payload.token);
                return { loading: false, error: false, isAuth: true, user: payload }
           }
 
           case authTypes.AUTH_LOGOUT: {
+               sessionStorage.removeItem("TOKEN");
                return initialState;
           }
 

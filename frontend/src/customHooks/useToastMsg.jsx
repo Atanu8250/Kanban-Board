@@ -1,6 +1,6 @@
 import { useToast } from '@chakra-ui/react';
 
-function useTaostMsg() {
+function useToastMsg() {
      const toast = useToast()
 
      return ({ title, desc = "", status }) => {
@@ -9,11 +9,11 @@ function useTaostMsg() {
                description: desc,
                status,
                isClosable: true,
-               position: 'top-right',
+               position: 'bottom-right',
                variant: 'left-accent',
                duration: 4000
           })
      }
 }
 
-export default useTaostMsg
+export default useToastMsg
