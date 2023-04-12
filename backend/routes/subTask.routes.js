@@ -1,5 +1,5 @@
 const express = require("express");
-const { createSubTask, updateSubTask } = require("../controllers/subTask.controller");
+const { createSubTask, updateSubTask, deleteSubTask } = require("../controllers/subTask.controller");
 
 const subTaskRouter = express.Router();
 
@@ -8,5 +8,7 @@ subTaskRouter.post("/:id", createSubTask)
 
 // ! Pass a single subTask's id to change it or update it
 subTaskRouter.patch("/:id", updateSubTask)
+
+subTaskRouter.delete("/:id", deleteSubTask)
 
 module.exports = subTaskRouter;

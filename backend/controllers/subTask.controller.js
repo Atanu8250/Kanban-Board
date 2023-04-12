@@ -53,4 +53,25 @@ const updateSubTask = async (req, res) => {
 }
 
 
-module.exports = { createSubTask, updateSubTask };
+const deleteSubTask = async (req, res) => {
+     const subTaskId = req.params.id;
+     const { taskId } = req.body;
+
+     try {
+          const task = await TaskModel.findById(taskId);
+
+          // ? Delete the subtask reference from the task;
+          task.subtask = task.subtask.filter(el => el.toString() !== subTaskId);
+          await task.save();
+
+          await SubTaskModel.findByIdAndDelete(subTaskId);
+
+          res.status(200).send({ message: `SubTask deleted from ${task.title}` })
+     } catch (error) {
+          console.log('error:', error)
+          res.status(500).send({ message: error.message, error });
+     }
+}
+
+
+module.exports = { createSubTask, updateSubTask, deleteSubTask };

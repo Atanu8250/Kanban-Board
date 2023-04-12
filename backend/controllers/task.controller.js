@@ -13,7 +13,7 @@ const createTask = async (req, res) => {
           // store the crated subTask's ids
           let subTaskIds = [];
 
-          // Creating subTasks for the specific task
+          // ? Creating subTasks for the specific task
           if (task.subtask) {
                try {
                     subTaskIds = await Promise.all(task.subtask.map(async e => {
@@ -28,10 +28,10 @@ const createTask = async (req, res) => {
                }
           }
 
-          // Adding all the subtask's ids in the specific task
+          // ? Adding all the subtask's ids in the specific task
           const newTask = new TaskModel({ ...task, subtask: subTaskIds });
 
-          // Adding the task's id in the specific board;
+          // ? Adding the task's id in the specific board;
           board.tasks = [...board.tasks, newTask._id];
 
           await newTask.save();
