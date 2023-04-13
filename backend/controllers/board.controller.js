@@ -64,7 +64,11 @@ const updateBoard = async (req, res) => {
 const deleteBoard = async (req, res) => {
      const boardId = req.params.id;
      try {
-          await BoardModel.findByIdAndDelete(boardId)
+          const board = await BoardModel.findById(boardId);
+
+          // ? Delete the tasks assigned to the board and the subtasks also
+
+          // await BoardModel.findByIdAndDelete(boardId)
 
           res.status(200).send({ message: "Board deleted Successfully" })
      } catch (error) {

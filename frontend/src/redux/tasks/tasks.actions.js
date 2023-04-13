@@ -222,7 +222,7 @@ export const postSubTask = (taskId, boardId, subTasks, toastMsg) => async (dispa
 }
 
 /**
- * Pass 'subTaskId' and 'updates' to update a specific subtask and taking 
+ * Pass 'subTaskId' and 'updates' to update a specific subtask and taking
  * 'boardId' to re-call the baord's data after updating the data to
  * show the updated data in dashboard
  * 'toastMsg' is optional
@@ -267,7 +267,7 @@ export const updateSubTask = (subTaskId, boardId, updates, toastMsg) => async (d
 
 
 /**
- * Pass 'subTaskId' to delete the specific task, 'taskId' to 
+ * Pass 'subTaskId' to delete the specific task, 'taskId' to
  * remove the reference of this subTask in the task and
  * taking the 'boardId' to udpate means get the updated data
  * of that specific board after deleting the task.

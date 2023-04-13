@@ -1,13 +1,223 @@
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  --primary-color: #635fc7;
+  --primary-bg-color: #f4f7fd;
 }
 
-.App{
+.App {
   min-height: 100vh;
+}
+
+button {
+  padding: 8px 15px;
+  border-radius: 18px;
+  background-color: var(--primary-color) !important;
+  color: #fff !important;
+}
+
+.sidebar {
+  min-height: 70svh;
+  width: 20%;
+  background-color: #fff;
+}
+
+.subHeading-text {
+  letter-spacing: 1px;
+  margin-top: 15px;
+  margin-left: 10%;
+  font-size: 14px;
+  font-weight: 600;
+  color: gray;
+  text-transform: uppercase;
+}
+
+.board-controller {
+  display: none !important;
+}
+
+.board-controller>svg {
+  cursor: pointer;
+}
+
+.board-controller>svg:first-child {
+  color: rgb(54, 155, 255);
+}
+
+.board-controller>svg:last-child {
+  color: rgb(255, 86, 86);
+}
+
+.board-option {
+  padding-left: 10% !important;
+  display: flex;
+  justify-content: flex-start !important;
+  align-items: center;
+  width: 80%;
+  border-radius: 0px 30px 30px 0px !important;
+}
+
+.board-option>div {
+  width: 100%;
+  justify-content: space-between;
+}
+
+.board-option:hover .board-controller {
+  display: flex !important;
+}
+
+.active-board {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.non-active-board {
+  background-color: #fff !important;
+  color: black !important;
+}
+
+.new-board-btn {
+  margin: 20px 0px 0px 10% !important;
+}
+
+.new-board-input {
+  margin: 20px 0px 0px 5% !important;
+}
+
+.edit-board-input {
+  margin: 0px 0px 0px 5px !important;
+}
+
+.edit-board-input>input {
+  padding: 5px;
+  background-color: #8886cc;
+  width: 60%;
+  outline-color: #7b7b7b;
+}
+
+.new-board-input svg {
+  cursor: pointer;
+}
+
+
+#create-task-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding-bottom: 25px;
+}
+
+.tasks {
+  min-height: 93svh;
+  min-width: 80%;
+  background-color: var(--primary-bg-color);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  padding: 20px;
+}
+
+.task-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.task-section>p {
+  margin: 0px;
+}
+
+.task {
+  padding: 15px 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  width: 100%;
+  cursor: pointer;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
+.task-input>input {
+  padding: 5px;
+  background-color: transparent;
+  width: 80%;
+  outline-color: #7b7b7b;
+}
+
+.task-heading {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.subtask-info {
+  font-size: 14px;
+  color: rgb(142, 142, 142);
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+
+.subtask {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: var(--primary-bg-color);
+  border-radius: 5px;
+}
+
+.subtask>input {
+  accent-color: var(--primary-color);
+  height: 15px;
+  width: 15px;
+}
+
+.subtask-input {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.edit-subtask {
+  padding-bottom: 25px;
+}
+
+.edit-subtask>header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.edit-subtask>header>h2 {
+  font-size: 25px;
+}
+
+.edit-subtask>header>svg {
+  cursor: pointer;
+  color: rgb(251, 39, 39);
+}
+
+.edit-subtask>header+div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.edit-subtask>header+div>p:first-child {
+  font-weight: 600;
+  color: #7b7b7b;
+}
+
+
+.input-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+.input-div>label {
+  display: block;
 }

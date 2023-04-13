@@ -5,8 +5,8 @@ import { Navigate } from 'react-router-dom';
 function PrivateRoute({ children }) {
      const { isAuth } = useSelector(store => store.authManager);
 
+     return children;
      if (isAuth) {
-          return children;
      } else {
           return <Navigate to="/signin" />
      }
