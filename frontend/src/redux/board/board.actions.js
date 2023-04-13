@@ -1,4 +1,5 @@
 import * as boardTypes from './board.types';
+import { AUTH_LOGOUT } from '../auth/auth.types';
 
 
 /** 
@@ -13,7 +14,7 @@ import * as boardTypes from './board.types';
 
 // Get Boards names based on the logged-in user
 export const getBoards = () => async (dispatch) => {
-     
+
      dispatch({ type: boardTypes.BOARD_LOADING })
 
      try {
@@ -29,6 +30,13 @@ export const getBoards = () => async (dispatch) => {
                dispatch({ type: boardTypes.GET_BOARD_SUCCES, payload: data })
           } else {
                dispatch({ type: boardTypes.BOARD_ERROR, payload: data.message })
+          }
+
+          // * IF TOKEN EXPIRED
+          if (res.status === 401) {
+               dispatch({ type: AUTH_LOGOUT });
+               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`);
+               return;
           }
      } catch (error) {
           console.log('error:', error)
@@ -60,6 +68,12 @@ export const createBoard = (boardName) => async (dispatch) => {
                dispatch({ type: boardTypes.BOARD_ERROR, payload: data.message })
           }
 
+          // * IF TOKEN EXPIRED
+          if (res.status === 401) {
+               dispatch({ type: AUTH_LOGOUT });
+               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`);
+               return;
+          }
      } catch (error) {
           console.log('error:', error)
           dispatch({ type: boardTypes.BOARD_ERROR, payload: error.message })
@@ -90,6 +104,13 @@ export const editBoard = (boardId, boardName) => async (dispatch) => {
           } else {
                dispatch({ type: boardTypes.BOARD_ERROR, payload: data.message })
           }
+          
+          // * IF TOKEN EXPIRED
+          if (res.status === 401) {
+               dispatch({ type: AUTH_LOGOUT })
+               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               return;
+          }
      } catch (error) {
           console.log('error:', error)
           dispatch({ type: boardTypes.BOARD_ERROR, payload: error.message })
@@ -115,6 +136,13 @@ export const deleteBoard = (boardId) => async (dispatch) => {
                dispatch(getBoards())
           } else {
                dispatch({ type: boardTypes.BOARD_ERROR, payload: data.message })
+          }
+          
+          // * IF TOKEN EXPIRED
+          if (res.status === 401) {
+               dispatch({ type: AUTH_LOGOUT })
+               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               return;
           }
      } catch (error) {
           console.log('error:', error)

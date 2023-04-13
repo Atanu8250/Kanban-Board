@@ -7,7 +7,7 @@ const initialState = {
           status: false,
           message: ""
      },
-     data: []
+     data: {}
 }
 
 

@@ -15,8 +15,11 @@ import {
 import { RxCross2 } from 'react-icons/rx'
 import { BsCheckLg } from 'react-icons/bs'
 import { RiDeleteBin6Line } from 'react-icons/ri'
+import { TbEdit } from 'react-icons/tb'
 
-function Task() {
+function Task({ t }) {
+     const { _id, title, description, status, subtask } = t;
+
      const { onOpen, onClose, isOpen } = useDisclosure();
 
      const editNameRef = useRef();
@@ -45,47 +48,67 @@ function Task() {
      return (
           <>
                <Box className='task' onClick={onOpen}>
-                    <Text className='task-heading'>Build UI for Search</Text>
-                    <Text className='subtask-info'>1 of 3 subtasks</Text>
+                    <Text className='task-heading'>{title}</Text>
+                    <Text className='subtask-info'>
+                         {subtask.filter(e => e.isCompleted).length} of {subtask.length} subtasks
+                    </Text>
                </Box>
 
-               <Modal isOpen={isOpen} onClose={onClose}>
+               <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
                     <ModalOverlay />
                     <ModalContent className='edit-subtask'>
                          <ModalHeader>
                               {
                                    editName ?
                                         <HStack className='task-input'>
-                                             <input defaultValue={'Build UI for Search'} ref={editNameRef} />
+                                             <input defaultValue={title} ref={editNameRef} />
                                              <HStack>
                                                   <BsCheckLg onClick={handleEditName} />
                                                   <RxCross2 onClick={() => setEditName(false)} />
                                              </HStack>
                                         </HStack> :
-                                        <Heading onDoubleClick={() => setEditName(true)}>Build UI for Search</Heading>
+                                        <Heading onDoubleClick={() => setEditName(true)}>Task: {title}</Heading>
                               }
-                              <RiDeleteBin6Line />
+                              <HStack>
+                                   <TbEdit onClick={() => setEditName(true)} />
+                                   <RiDeleteBin6Line />
+                              </HStack>
                          </ModalHeader>
                          <ModalBody>
                               {
                                    editDesc ?
                                         <HStack className='task-input'>
-                                             <input defaultValue={'Build UI for Searching for RM-Mock'} ref={editDescRef} />
+                                             <input defaultValue={description} ref={editDescRef} />
                                              <HStack>
                                                   <BsCheckLg onClick={handleEditDesc} />
                                                   <RxCross2 onClick={() => setEditDesc(false)} />
                                              </HStack>
                                         </HStack> :
-                                        <Text onDoubleClick={() => setEditDesc(true)}>Build UI for Searching for RM-Mock</Text>
+                                        <HStack justifyContent='space-between'>
+                                             <Text onDoubleClick={() => setEditDesc(true)}>{description}</Text>
+                                             <TbEdit
+                                                  color='var(--primary-edit-color)'
+                                                  onClick={() => setEditDesc(true)} />
+                                        </HStack>
                               }
 
                               <div className='input-div'>
-                                   <label>Subtasks (1 of 2)</label>
+                                   <label>Subtasks ({subtask.filter(e => e.isCompleted).length} of {subtask.length})</label>
                                    {
-                                        [0, 1].map((e, i) => (
-                                             <div key={i} className='subtask'>
-                                                  <input type='checkbox' defaultChecked={e} onChange={(e) => handleSubTaskChange(e)} />
-                                                  <Text color={e ? 'gray' : '#000'} as={e ? 's' : 'p'}>Complete Backend</Text>
+                                        subtask.map((e, i) => (
+                                             <div
+                                                  key={i}
+                                                  className='subtask'>
+                                                  <input
+                                                       type='checkbox'
+                                                       defaultChecked={e.isCompleted}
+                                                       onChange={(e) => handleSubTaskChange(e)} />
+                                                  <Text
+                                                       color={e.isCompleted ? 'gray' : '#000'}
+                                                       as={e.isCompleted ? 's' : 'p'}>
+                                                       {e.title}
+                                                  </Text>
+                                                  <TbEdit />
                                              </div>)
                                         )
                                    }
@@ -93,7 +116,7 @@ function Task() {
 
                               <div className='input-div'>
                                    <label>Current Status</label>
-                                   <Select onChange={handleTaskChange}>
+                                   <Select onChange={handleTaskChange} defaultValue={status}>
                                         <option value="Todo">Todo</option>
                                         <option value="Doing">Doing</option>
                                         <option value="Done">Done</option>

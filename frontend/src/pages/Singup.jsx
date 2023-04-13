@@ -10,16 +10,21 @@ import {
      useColorModeValue,
      InputGroup,
      InputRightElement,
+     Text,
+     Heading,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { signup } from '../redux/auth/auth.actions';
 import useToastMsg from '../customHooks/useToastMsg';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Singup() {
 
      const dispatch = useDispatch()
      const { loading } = useSelector(store => store.authManager);
+
+     const navigate = useNavigate();
 
      const toastMsg = useToastMsg()
      const [showPassword, setShowPassword] = useState(false)
@@ -35,7 +40,7 @@ function Singup() {
                password: pwdRef.current.value,
           }
 
-          dispatch(signup(user, toastMsg));
+          dispatch(signup(user, navigate, toastMsg));
           userNameRef.current.value = "";
           emailRef.current.value = "";
           pwdRef.current.value = "";
@@ -48,6 +53,14 @@ function Singup() {
                justify={'center'}
                bg={useColorModeValue('gray.50', 'gray.800')}>
                <Stack spacing={8} mx={'auto'} maxW={'lg'}>
+                    <Stack align={'center'}>
+                         <Heading fontSize={'4xl'} textAlign={'center'}>
+                              Sign-up on Kanban
+                         </Heading>
+                         <Text fontSize={'lg'} color={'gray.600'}>
+                              to maintain your tasks easily ✌️
+                         </Text>
+                    </Stack>
                     <Box
                          rounded={'lg'}
                          bg={useColorModeValue('white', 'gray.700')}
@@ -67,19 +80,21 @@ function Singup() {
                                    <InputGroup>
                                         <Input type={showPassword ? 'text' : 'password'} ref={pwdRef} />
                                         <InputRightElement h={'full'}>
-                                             <Button
+                                             <span
+                                                  role='button'
                                                   variant={'ghost'}
                                                   onClick={() =>
                                                        setShowPassword((showPassword) => !showPassword)
                                                   }>
-                                                  {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                                             </Button>
+                                                  {showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                                             </span>
                                         </InputRightElement>
                                    </InputGroup>
                               </FormControl>
                               <Stack spacing={10}>
                                    <Button
                                         isLoading={loading}
+                                        loadingText='Wait'
                                         onClick={handleSignup}
                                         bg={'blue.400'}
                                         color={'white'}
@@ -88,6 +103,11 @@ function Singup() {
                                         }}>
                                         Sign up
                                    </Button>
+                              </Stack>
+                              <Stack pt={6}>
+                                   <Text align={'center'}>
+                                        Already a user? <Link to="/signin" style={{ color: 'blue' }}>Sign-in</Link>
+                                   </Text>
                               </Stack>
                          </Stack>
                     </Box>

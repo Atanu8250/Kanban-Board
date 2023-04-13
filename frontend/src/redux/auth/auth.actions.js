@@ -14,10 +14,11 @@ import * as authTypes from './auth.types';
 /**
  * In 'cred' we're passing an Object with 'username', 'email', and 'password' key with 
  * proper values and 
+ * 'navigate' for naviagting the user to the 'sign-in' page
  * In the 'toastMsg' we're passing the returned function by the 'useToastMsg' custom-hook
  * */
 
-export const signin = (cred, toastMsg) => async (dispatch) => {
+export const signin = (cred, navigate, toastMsg) => async (dispatch) => {
 
      if (!cred.email || !cred.password) return;
 
@@ -34,10 +35,17 @@ export const signin = (cred, toastMsg) => async (dispatch) => {
 
           const data = await res.json();
 
+          // * IF TOKEN EXPIRED
+          if (res.status === 401) {
+               dispatch({ type: AUTH_LOGOUT })
+               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+          }
+
           if (res.ok) {
-               dispatch({ type: authTypes.AUTH_LOGIN_SUCCESS, payload: data.user })
+               dispatch({ type: authTypes.AUTH_LOGIN_SUCCESS, payload: data.user });
+               navigate('/');
           } else {
-               dispatch({ type: authTypes.AUTH_ERROR })
+               dispatch({ type: authTypes.AUTH_ERROR });
           }
 
           toastMsg({
@@ -46,12 +54,12 @@ export const signin = (cred, toastMsg) => async (dispatch) => {
           })
 
      } catch (error) {
-          console.log('error:', error)
-          dispatch({ type: authTypes.AUTH_ERROR })
+          console.log('error:', error);
+          dispatch({ type: authTypes.AUTH_ERROR });
           toastMsg({
                title: error.message,
                status: 'error'
-          })
+          });
      }
 }
 
@@ -59,13 +67,14 @@ export const signin = (cred, toastMsg) => async (dispatch) => {
 /**
  * In 'cred' we're passing an Object with 'username', 'email', and 'password' key with 
  * proper values and 
+ * 'navigate' for naviagting the user to the 'sign-up' page
  * In the 'toastMsg' we're passing the returned function by the 'useToastMsg' custom-hook
  * */
-export const signup = (cred, toastMsg) => async (dispatch) => {
+export const signup = (cred, navigate, toastMsg) => async (dispatch) => {
 
      if (!cred.username || !cred.email || !cred.password) return;
 
-     dispatch({ type: authTypes.AUTH_LOADING })
+     dispatch({ type: authTypes.AUTH_LOADING });
 
      try {
           const res = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/signup`, {
@@ -77,19 +86,27 @@ export const signup = (cred, toastMsg) => async (dispatch) => {
           })
 
           const data = await res.json();
+          
+          
+          // * IF TOKEN EXPIRED
+          if (res.status === 401) {
+               dispatch({ type: AUTH_LOGOUT })
+               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+          }
+
+          if(res.ok) navigate('/signin');
           dispatch({ type: res.ok ? authTypes.AUTH_SUCCESS : authTypes.AUTH_ERROR });
 
           toastMsg({
                title: data.message,
                status: res.ok ? 'success' : 'warning',
-          })
+          });
      } catch (error) {
-          console.log('error:', error)
+          console.log('error:', error);
           dispatch({ type: authTypes.AUTH_ERROR })
           toastMsg({
                title: error.message,
                status: 'error'
-          })
+          });
      }
-
 }

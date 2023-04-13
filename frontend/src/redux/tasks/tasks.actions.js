@@ -29,8 +29,16 @@ export const getTasks = (boardId) => async (dispatch) => {
                }
           })
           const data = await res.json();
+
+          // * IF TOKEN EXPIRED
+          if (res.status === 401) {
+               dispatch({ type: AUTH_LOGOUT })
+               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               return;
+          }
+
           if (res.ok) {
-               dispatch({ type: taskTypes.GET_TASKS_SUCCESS, payload: data.message })
+               dispatch({ type: taskTypes.GET_TASKS_SUCCESS, payload: data })
           } else {
                dispatch({ type: taskTypes.TASKS_ERROR, payload: data.message })
           }
@@ -62,6 +70,13 @@ export const postTask = (boardId, task, toastMsg) => async (dispatch) => {
                }
           })
           const data = await res.json();
+
+          // * IF TOKEN EXPIRED
+          if (res.status === 401) {
+               dispatch({ type: AUTH_LOGOUT })
+               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               return;
+          }
 
           if (res.ok) {
                dispatch(getTasks(boardId));
@@ -108,6 +123,13 @@ export const updateTask = (taskId, boardId, updates, toastMsg) => async (dispatc
           })
           const data = await res.json();
 
+          // * IF TOKEN EXPIRED
+          if (res.status === 401) {
+               dispatch({ type: AUTH_LOGOUT })
+               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               return;
+          }
+
           if (res.ok) {
                dispatch(getTasks(boardId));
           } else {
@@ -152,6 +174,13 @@ export const deleteTask = (taskId, boardId, toastMsg) => async (dispatch) => {
                }
           })
           const data = await res.json();
+
+          // * IF TOKEN EXPIRED
+          if (res.status === 401) {
+               dispatch({ type: AUTH_LOGOUT })
+               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               return;
+          }
 
           if (res.ok) {
                dispatch(getTasks(boardId));
@@ -199,6 +228,13 @@ export const postSubTask = (taskId, boardId, subTasks, toastMsg) => async (dispa
           })
           const data = await res.json();
 
+          // * IF TOKEN EXPIRED
+          if (res.status === 401) {
+               dispatch({ type: AUTH_LOGOUT })
+               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               return;
+          }
+
           if (res.ok) {
                dispatch(getTasks(boardId));
           } else {
@@ -243,6 +279,13 @@ export const updateSubTask = (subTaskId, boardId, updates, toastMsg) => async (d
                }
           })
           const data = await res.json();
+
+          // * IF TOKEN EXPIRED
+          if (res.status === 401) {
+               dispatch({ type: AUTH_LOGOUT })
+               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               return;
+          }
 
           if (res.ok) {
                dispatch(getTasks(boardId));
@@ -289,6 +332,13 @@ export const deleteSubTask = (subTaskId, taskId, boardId, toastMsg) => async (di
                }
           })
           const data = await res.json();
+
+          // * IF TOKEN EXPIRED
+          if (res.status === 401) {
+               dispatch({ type: AUTH_LOGOUT })
+               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               return;
+          }
 
           if (res.ok) {
                dispatch(getTasks(boardId));

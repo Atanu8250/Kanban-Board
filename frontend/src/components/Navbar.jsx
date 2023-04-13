@@ -20,11 +20,12 @@ import {
      Textarea,
      Input,
 } from '@chakra-ui/react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import useToastMsg from '../customHooks/useToastMsg';
 import { postTask } from '../redux/tasks/tasks.actions';
 
 function Navbar() {
+     const { data } = useSelector(store => store.tasksManager);
      const { isOpen, onOpen, onClose } = useDisclosure()
      const [subtasks, setSubtasks] = useState([""]);
      const dispatch = useDispatch();
@@ -42,10 +43,11 @@ function Navbar() {
           }
           console.log({ task });
 
-          // ! dispatch(postTask(boardId, task, toastMsg))
-          
+          dispatch(postTask(data._id, task, toastMsg))
+
           e.target.reset()
           setSubtasks([""])
+          onClose()
      }
 
      const handleAddSubTaskInput = () => {
@@ -66,7 +68,7 @@ function Navbar() {
 
      return (
           <>
-               <Flex minWidth='max-content' alignItems='center' gap='2' p="10px 15px" bgColor="#fff">
+               <Flex minWidth='max-content' alignItems='center' gap='2' p="10px 15px" bgColor="#fff" position='sticky' top='0' left='0' zIndex='5'>
                     <Box p='2'>
                          <NavLink to="/">
                               <HStack>

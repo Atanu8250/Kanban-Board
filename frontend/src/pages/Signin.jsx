@@ -10,11 +10,14 @@ import {
      useColorModeValue,
      InputGroup,
      InputRightElement,
+     Text,
+     Heading,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { signin } from '../redux/auth/auth.actions';
 import useToastMsg from '../customHooks/useToastMsg';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Signin() {
 
@@ -22,6 +25,8 @@ function Signin() {
      const { loading } = useSelector(store => store.authManager);
      const [showPassword, setShowPassword] = useState(false);
      const toastMsg = useToastMsg()
+
+     const navigate = useNavigate();
 
      const emailRef = useRef()
      const pwdRef = useRef()
@@ -32,10 +37,9 @@ function Signin() {
                password: pwdRef.current.value
           }
 
-          dispatch(signin(user, toastMsg));
+          dispatch(signin(user, navigate, toastMsg));
           emailRef.current.value = "";
           pwdRef.current.value = "";
-
      }
 
      return (
@@ -45,6 +49,14 @@ function Signin() {
                justify={'center'}
                bg={useColorModeValue('gray.50', 'gray.800')}>
                <Stack spacing={8} mx={'auto'} maxW={'lg'}>
+                    <Stack align={'center'}>
+                         <Heading fontSize={'4xl'} textAlign={'center'}>
+                              Sign-in on Kanban
+                         </Heading>
+                         <Text fontSize={'lg'} color={'gray.600'}>
+                              to maintain your tasks easily ✌️
+                         </Text>
+                    </Stack>
                     <Box
                          rounded={'lg'}
                          bg={useColorModeValue('white', 'gray.700')}
@@ -60,19 +72,21 @@ function Signin() {
                                    <InputGroup>
                                         <Input type={showPassword ? 'text' : 'password'} ref={pwdRef} />
                                         <InputRightElement h={'full'}>
-                                             <Button
+                                             <span
+                                                  role='button'
                                                   variant={'ghost'}
                                                   onClick={() =>
                                                        setShowPassword((showPassword) => !showPassword)
                                                   }>
-                                                  {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                                             </Button>
+                                                  {showPassword ? <ViewOffIcon /> : <ViewIcon />}
+                                             </span>
                                         </InputRightElement>
                                    </InputGroup>
                               </FormControl>
                               <Stack spacing={10}>
                                    <Button
                                         isLoading={loading}
+                                        loadingText='Wait'
                                         onClick={handleLogin}
                                         bg={'blue.400'}
                                         color={'white'}
@@ -81,6 +95,11 @@ function Signin() {
                                         }}>
                                         Log in
                                    </Button>
+                              </Stack>
+                              <Stack pt={6}>
+                                   <Text align={'center'}>
+                                        New user? <Link to="/signup" style={{ color: 'blue' }}>Sign up</Link>
+                                   </Text>
                               </Stack>
                          </Stack>
                     </Box>

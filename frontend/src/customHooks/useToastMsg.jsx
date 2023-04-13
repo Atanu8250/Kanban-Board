@@ -8,10 +8,9 @@ function useToastMsg() {
                title,
                description: desc,
                status,
-               isClosable: true,
                position: 'bottom-right',
                variant: 'left-accent',
-               duration: 4000
+               duration: 3000
           })
      }
 }

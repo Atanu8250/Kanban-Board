@@ -4,7 +4,7 @@ const getAllBoards = async (req, res) => {
      const userId = req.headers.userId;
 
      try {
-          const baords = await BoardModel.find({ user: userId })
+          const baords = await BoardModel.find({ user: userId }).select(['-user', '-tasks', '-v'])
 
           res.status(200).send(baords);
      } catch (error) {
@@ -76,5 +76,28 @@ const deleteBoard = async (req, res) => {
           res.status(500).send({ message: error.message, error });
      }
 }
+
+/*
+const deleteBoard = async (req, res) => {  
+  try {
+    let board = await BoardModel.findById(req.params.Id)
+    let taskArray = board.tasks.map(async(ele)=>{
+      return await TaskModel.findById(ele)
+    })
+    let resolvedTaskArray = await Promise.all(taskArray)
+    resolvedTaskArray.map(async(ele)=>{
+      ele.subtask.map(async(childEle)=>{
+        await SubTaskModel.findByIdAndRemove(childEle)
+      })
+      await TaskModel.findByIdAndRemove(ele);
+    })
+    await BoardModel.findByIdAndRemove(req.params.Id)
+    res.status(200).json({ message: "board has been deleted." });
+  } catch (err) {
+    res.status(301).
+      json({ message: "something went wrong", error: err.message });
+  }
+};
+*/
 
 module.exports = { getAllBoards, getSingleBoard, createBoard, updateBoard, deleteBoard };
