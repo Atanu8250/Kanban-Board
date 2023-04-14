@@ -1,4 +1,6 @@
+const TaskModel = require('../models/task.model');
 const BoardModel = require('../models/board.model');
+const SubTaskModel = require('../models/subTask.model');
 
 const getAllBoards = async (req, res) => {
      const userId = req.headers.userId;
@@ -67,8 +69,17 @@ const deleteBoard = async (req, res) => {
           const board = await BoardModel.findById(boardId);
 
           // ? Delete the tasks assigned to the board and the subtasks also
+          const taskArray = board.tasks.map(async (ele) => await TaskModel.findById(ele))
+          const resolvedTaskArray = await Promise.all(taskArray);
 
-          // await BoardModel.findByIdAndDelete(boardId)
+          resolvedTaskArray.map(async (ele) => {
+               ele.subtask.map(async (childEle) => {
+                    await SubTaskModel.findByIdAndDelete(childEle);
+               })
+               await TaskModel.findByIdAndDelete(ele);
+          })
+
+          await BoardModel.findByIdAndDelete(boardId)
 
           res.status(200).send({ message: "Board deleted Successfully" })
      } catch (error) {
@@ -76,28 +87,5 @@ const deleteBoard = async (req, res) => {
           res.status(500).send({ message: error.message, error });
      }
 }
-
-/*
-const deleteBoard = async (req, res) => {  
-  try {
-    let board = await BoardModel.findById(req.params.Id)
-    let taskArray = board.tasks.map(async(ele)=>{
-      return await TaskModel.findById(ele)
-    })
-    let resolvedTaskArray = await Promise.all(taskArray)
-    resolvedTaskArray.map(async(ele)=>{
-      ele.subtask.map(async(childEle)=>{
-        await SubTaskModel.findByIdAndRemove(childEle)
-      })
-      await TaskModel.findByIdAndRemove(ele);
-    })
-    await BoardModel.findByIdAndRemove(req.params.Id)
-    res.status(200).json({ message: "board has been deleted." });
-  } catch (err) {
-    res.status(301).
-      json({ message: "something went wrong", error: err.message });
-  }
-};
-*/
 
 module.exports = { getAllBoards, getSingleBoard, createBoard, updateBoard, deleteBoard };

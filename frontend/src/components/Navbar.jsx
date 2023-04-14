@@ -115,9 +115,9 @@ function Navbar() {
                                    <div className='input-div'>
                                         <label>Current Status</label>
                                         <Select id='status' required>
-                                             <option value="Todo">Todo</option>
-                                             <option value="Doing">Doing</option>
-                                             <option value="Done">Done</option>
+                                             <option value="Todo">➕ Todo</option>
+                                             <option value="Doing">⏳ Doing</option>
+                                             <option value="Done">✔ Done</option>
                                         </Select>
                                    </div>
                                    <Button type='submit' isLoading={false}>Create Task</Button>

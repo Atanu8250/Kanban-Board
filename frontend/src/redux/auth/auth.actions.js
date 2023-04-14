@@ -1,7 +1,7 @@
 import * as authTypes from './auth.types';
 
 /** 
- * * Using 'fetch' instead of 'axios' because when I'm send error from the backend at
+ * * Using 'fetch' instead of 'axios' because when I'm sending error from the backend at
  * * that time axios is not able to catch the response messages with error status codes
  * * like 400 and above codes, but fetch is able get the errors with message and the 
  * * status properly,

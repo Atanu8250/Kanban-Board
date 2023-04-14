@@ -28,7 +28,7 @@ function TaskSection({ title }) {
           </Center>) :
                // ! Tasks fetched
                (<Box className='task-section'>
-                    <Text className='subHeading-text'>{title} ({filteredTasks?.length})</Text>
+                    <Text className='subHeading-text' data-title={title}>{title} ({filteredTasks?.length})</Text>
                     {
                          filteredTasks?.map((el, i) => <Task key={i} t={el} />)
                     }

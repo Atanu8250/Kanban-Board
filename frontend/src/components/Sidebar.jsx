@@ -24,7 +24,6 @@ function Sidebar() {
 
      const dispatch = useDispatch();
      const { loading, error, data: boards } = useSelector(store => store.boardManager);
-     console.log('boards:', boards)
 
      const handleCreateBoard = () => {
           let boardName = newBoardNameRef.current.value || `Board ${boards.length + 1}`;
@@ -39,6 +38,7 @@ function Sidebar() {
 
      const handleDeleteBoard = () => {
           dispatch(deleteBoard(deleteBoardRef.current))
+          setActiveBtn(1);
           onClose();
      }
 

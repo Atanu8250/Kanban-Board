@@ -1,4 +1,3 @@
-import React, { useRef, useState } from 'react';
 import {
      Box,
      Text,
@@ -11,39 +10,79 @@ import {
      useDisclosure,
      Select,
      HStack,
-} from '@chakra-ui/react'
-import { RxCross2 } from 'react-icons/rx'
-import { BsCheckLg } from 'react-icons/bs'
-import { RiDeleteBin6Line } from 'react-icons/ri'
-import { TbEdit } from 'react-icons/tb'
+} from '@chakra-ui/react';
+
+import { TbEdit } from 'react-icons/tb';
+import { RxCross2 } from 'react-icons/rx';
+import { MdDelete } from 'react-icons/md';
+import { BsCheckLg } from 'react-icons/bs';
+
+import React, { useRef, useState } from 'react';
+import { RiDeleteBin6Line } from 'react-icons/ri';
+import useToastMsg from '../customHooks/useToastMsg';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteSubTask, deleteTask, updateSubTask, updateTask } from '../redux/tasks/tasks.actions';
+
+
 
 function Task({ t }) {
-     const { _id, title, description, status, subtask } = t;
+     const { _id: taskId, title, description, status, subtask } = t;
+
+     const dispatch = useDispatch();
+     const { data: { _id: boardId } } = useSelector(store => store.tasksManager);
 
      const { onOpen, onClose, isOpen } = useDisclosure();
+     const toastMsg = useToastMsg();
 
      const editNameRef = useRef();
      const editDescRef = useRef();
+     const editSubtaskRef = useRef();
 
      const [editName, setEditName] = useState(false);
      const [editDesc, setEditDesc] = useState(false);
+     const [editSubtask, setEditSubtask] = useState(-1);
 
 
      const handleEditName = () => {
-          console.log(editNameRef.current.value)
+          if (editNameRef.current.value !== title) {
+               console.log(editNameRef.current.value);
+               dispatch(updateTask(taskId, boardId, { title: editNameRef.current.value }, toastMsg));
+          }
      }
 
      const handleEditDesc = () => {
-          console.log(editDescRef.current.value)
+          if (editDescRef.current.value !== description) {
+               console.log(editDescRef.current.value);
+               dispatch(updateTask(taskId, boardId, { description: editDescRef.current.value }, toastMsg));
+          }
      }
 
-     const handleSubTaskChange = (e) => {
-          console.log(e.target.checked)
+     const handleEditSubtaskName = (oldSubTaskTitle) => {
+          if (editSubtaskRef.current.value !== oldSubTaskTitle) {
+               console.log(editSubtaskRef.current.value);
+               dispatch(updateSubTask(editSubtask, boardId, { title: editSubtaskRef.current.value }, toastMsg));
+               setEditSubtask(-1);
+          }
      }
 
-     const handleTaskChange = (e) => {
-          console.log(e.target.value);
+     const handleTaskStatusChange = (e) => {
+          if (e.target.value !== status) {
+               dispatch(updateTask(taskId, boardId, { status: e.target.value }, toastMsg))
+          }
      }
+
+     const handleSubTaskStatusChange = (e, subtaskId) => {
+          dispatch(updateSubTask(subtaskId, boardId, { isCompleted: e.target.checked }, toastMsg));
+     }
+
+     const handleTaskDelete = () => {
+          dispatch(deleteTask(taskId, boardId, toastMsg));
+     }
+
+     const handleSubtaskDelete = (subtaskId) => {
+          dispatch(deleteSubTask(subtaskId, taskId, boardId, toastMsg))
+     }
+
 
      return (
           <>
@@ -71,7 +110,7 @@ function Task({ t }) {
                               }
                               <HStack>
                                    <TbEdit onClick={() => setEditName(true)} />
-                                   <RiDeleteBin6Line />
+                                   <RiDeleteBin6Line onClick={handleTaskDelete} />
                               </HStack>
                          </ModalHeader>
                          <ModalBody>
@@ -99,16 +138,31 @@ function Task({ t }) {
                                              <div
                                                   key={i}
                                                   className='subtask'>
-                                                  <input
-                                                       type='checkbox'
-                                                       defaultChecked={e.isCompleted}
-                                                       onChange={(e) => handleSubTaskChange(e)} />
-                                                  <Text
-                                                       color={e.isCompleted ? 'gray' : '#000'}
-                                                       as={e.isCompleted ? 's' : 'p'}>
-                                                       {e.title}
-                                                  </Text>
-                                                  <TbEdit />
+                                                  {
+                                                       editSubtask === e._id ?
+                                                            <>
+                                                                 <input type='text' defaultValue={e.title} ref={editSubtaskRef} />
+                                                                 <HStack>
+                                                                      <BsCheckLg onClick={() => handleEditSubtaskName(e.title)} />
+                                                                      <RxCross2 onClick={() => setEditSubtask(-1)} />
+                                                                 </HStack>
+                                                            </> :
+                                                            <>
+                                                                 <input
+                                                                      type='checkbox'
+                                                                      defaultChecked={e.isCompleted}
+                                                                      onChange={(evnt) => handleSubTaskStatusChange(evnt, e._id)} />
+                                                                 <Text
+                                                                      color={e.isCompleted ? 'gray' : '#000'}
+                                                                      as={e.isCompleted ? 's' : 'p'}>
+                                                                      {e.title}
+                                                                 </Text>
+                                                                 <HStack>
+                                                                      <TbEdit onClick={() => setEditSubtask(e._id)} />
+                                                                      <MdDelete onClick={() => handleSubtaskDelete(e._id)} />
+                                                                 </HStack>
+                                                            </>
+                                                  }
                                              </div>)
                                         )
                                    }
@@ -116,10 +170,10 @@ function Task({ t }) {
 
                               <div className='input-div'>
                                    <label>Current Status</label>
-                                   <Select onChange={handleTaskChange} defaultValue={status}>
-                                        <option value="Todo">Todo</option>
-                                        <option value="Doing">Doing</option>
-                                        <option value="Done">Done</option>
+                                   <Select onChange={handleTaskStatusChange} defaultValue={status}>
+                                        <option value="Todo">➕ Todo</option>
+                                        <option value="Doing">⏳ Doing</option>
+                                        <option value="Done">✔ Done</option>
                                    </Select>
                               </div>
                          </ModalBody>

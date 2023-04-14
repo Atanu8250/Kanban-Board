@@ -5,11 +5,15 @@
 }
 
 :root {
-
   --primary-color: #635fc7;
   --primary-bg-color: #f4f7fd;
+
   --primary-edit-color: #356eea;
   --primary-delete-color: #fb2727;
+  
+  --primary-todo-color: #635fc7;
+  --primary-doing-color: #ffa500;
+  --primary-done-color: #008e28;
 }
 
 .App {
@@ -143,6 +147,29 @@ button {
   gap: 20px;
 }
 
+.task-section>p:first-child {
+  text-decoration: underline;
+  text-decoration-skip: spaces;
+  text-decoration-skip-ink: auto;
+  text-decoration-thickness: 0.1rem;
+  text-underline-offset: 4px;
+  transition: text-shadow 200ms ease-in-out;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.task-section>p:first-child[data-title='Todo'] {
+  color: var(--primary-todo-color)
+}
+
+.task-section>p:first-child[data-title='Doing'] {
+  color: var(--primary-doing-color)
+}
+
+.task-section>p:first-child[data-title='Done'] {
+  color: var(--primary-done-color)
+}
+
 .task-section>p {
   margin: 0px;
 }
@@ -186,15 +213,27 @@ button {
   border-radius: 5px;
 }
 
-.subtask>svg {
+.subtask>div:last-child {
   margin-left: auto;
+}
+
+.subtask svg:first-child {
   color: var(--primary-edit-color);
 }
 
-.subtask>input {
+.subtask svg:last-child {
+  color: var(--primary-delete-color);
+}
+
+.subtask>input[type='checkbox'] {
   accent-color: var(--primary-color);
   height: 15px;
   width: 15px;
+}
+
+.subtask>input[type='text'] {
+  padding: 2px 5px;
+  background-color: #d8d7f1;
 }
 
 .subtask-input {
@@ -252,4 +291,24 @@ button {
 
 .input-div>label {
   display: block;
+}
+
+.input-div select {
+  font-weight: 600 !important;
+}
+
+.input-div select>option {
+  font-weight: 600 !important;
+}
+
+.input-div select>option[value='Todo'] {
+  color: var(--primary-todo-color) !important;
+}
+
+.input-div select>option[value='Doing'] {
+  color: var(--primary-doing-color) !important;
+}
+
+.input-div select>option[value='Done'] {
+  color: var(--primary-done-color) !important;
 }

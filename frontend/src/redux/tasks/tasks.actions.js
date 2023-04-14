@@ -1,7 +1,7 @@
 import * as taskTypes from './tasks.types';
 
 /** 
- * * Using 'fetch' instead of 'axios' because when I'm send error from the backend at
+ * * Using 'fetch' instead of 'axios' because when I'm sending error from the backend at
  * * that time axios is not able to catch the response messages with error status codes
  * * like 400 and above codes, but fetch is able get the errors with message and the 
  * * status properly,
@@ -323,7 +323,7 @@ export const deleteSubTask = (subTaskId, taskId, boardId, toastMsg) => async (di
      dispatch({ type: taskTypes.TASKS_LOADING });
 
      try {
-          const res = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/subtask/${taskId}`, {
+          const res = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/subtask/${subTaskId}`, {
                method: "DELETE",
                body: JSON.stringify({ taskId }),
                headers: {
