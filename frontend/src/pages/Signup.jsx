@@ -19,7 +19,7 @@ import { signup } from '../redux/auth/auth.actions';
 import useToastMsg from '../customHooks/useToastMsg';
 import { Link, useNavigate } from 'react-router-dom';
 
-function Singup() {
+function Signup() {
 
      const dispatch = useDispatch()
      const { loading } = useSelector(store => store.authManager);
@@ -116,4 +116,4 @@ function Singup() {
      )
 }
 
-export default Singup
+export default Signup
