@@ -30,8 +30,10 @@ function Sidebar() {
           setCreateBoardOpt(false);
      }
 
-     const handleEditBoard = (boardId) => {
-          dispatch(editBoard(boardId, editBoardNameRef.current.value))
+     const handleEditBoard = () => {
+          const newName = editBoardNameRef.current.value;
+          const oldName = boards.filter(e => e._id === editBoardOpt)[0].name;
+          if (newName !== oldName) dispatch(editBoard(editBoardOpt, newName));
           setEditBoardOpt(-1);
      }
 
@@ -76,7 +78,7 @@ function Sidebar() {
                                                                  <BsGrid1X2 />
                                                                  <input autoFocus defaultValue={board.name} ref={editBoardNameRef} />
                                                                  <HStack>
-                                                                      <BsCheckLg onClick={() => handleEditBoard(board._id)} />
+                                                                      <BsCheckLg onClick={handleEditBoard} />
                                                                       <RxCross2 onClick={() => setEditBoardOpt(-1)} />
                                                                  </HStack>
                                                             </HStack> :

@@ -17,16 +17,24 @@ import { RxCross2 } from 'react-icons/rx';
 import { MdDelete } from 'react-icons/md';
 import { BsCheckLg } from 'react-icons/bs';
 
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import useToastMsg from '../customHooks/useToastMsg';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteSubTask, deleteTask, updateSubTask, updateTask } from '../redux/tasks/tasks.actions';
 
+// Get local date and time
+function getDateAndTime(createdAt) {
+     const dateAndTime = new Date(createdAt);
+     const [date, time] = dateAndTime.toLocaleTimeString('en-US', { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true }).split(", ");
+     return { date, time };
+}
 
 
 function Task({ t }) {
-     const { _id: taskId, title, description, status, subtask } = t;
+     const { _id: taskId, title, description, status, subtask, createdAt } = t;
+     const { date, time } = useMemo(() => getDateAndTime(createdAt), [createdAt]);
+
 
      const dispatch = useDispatch();
      const { data: { _id: boardId } } = useSelector(store => store.tasksManager);
@@ -46,22 +54,22 @@ function Task({ t }) {
      const handleEditName = () => {
           if (editNameRef.current.value !== title) {
                dispatch(updateTask(taskId, boardId, { title: editNameRef.current.value }, toastMsg));
-               setEditName(false)
           }
+          setEditName(false)
      }
 
      const handleEditDesc = () => {
           if (editDescRef.current.value !== description) {
                dispatch(updateTask(taskId, boardId, { description: editDescRef.current.value }, toastMsg));
-               setEditDesc(false);
           }
+          setEditDesc(false);
      }
 
      const handleEditSubtaskName = (oldSubTaskTitle) => {
           if (editSubtaskRef.current.value !== oldSubTaskTitle) {
                dispatch(updateSubTask(editSubtask, boardId, { title: editSubtaskRef.current.value }, toastMsg));
-               setEditSubtask(-1);
           }
+          setEditSubtask(-1);
      }
 
      const handleTaskStatusChange = (e) => {
@@ -175,6 +183,10 @@ function Task({ t }) {
                                         <option value="Done">✔ Done</option>
                                    </Select>
                               </div>
+                              <HStack color='gray' fontSize='12px'>
+                                   <bdi>Created at:</bdi>
+                                   <Text>{date}  | 🕖 {time}</Text>
+                              </HStack>
                          </ModalBody>
                     </ModalContent>
                </Modal>
