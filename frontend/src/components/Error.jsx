@@ -10,4 +10,4 @@ function Error({ children, CN }) {
      )
 }
 
-export default Error
+export default React.memo(Error);

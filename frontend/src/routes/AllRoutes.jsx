@@ -1,19 +1,30 @@
-import React, { lazy, Suspense } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import lazyLoad from '../lazyLoad';
+import React, { Suspense } from 'react';
 import PrivateRoute from './PrivateRoute';
-import ErrorFallback from '../components/ErrorFallback';
+import Loading from '../components/Loading';
+import { Route, Routes } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary'
-import { Center, Spinner } from '@chakra-ui/react';
+import ErrorFallback from '../components/ErrorFallback';
 
-const NotFound = lazy(() => import('../pages/NotFound'));
-const Signin = lazy(() => import('../pages/Signin'));
-const Signup = lazy(() => import('../pages/Signup'));
-const Board = lazy(() => import('../pages/Board'));
+const NotFound = lazyLoad('./pages/NotFound');
+const Signin = lazyLoad('./pages/Signin');
+const Signup = lazyLoad('./pages/Signup');
+const Board = lazyLoad('./pages/Board');
+
+
+/**
+ * * --- Lazy-Loaded Routes ---
+ * Suspence => it will show the 'fallback' component untill file is loaded lazily
+ * ErrorBoundary => while loading the 'lazily loaded component' if we got any error 
+ *                  then this 'ErrorBoundary' will show the 'FallbackComponent' to 
+ *                  the user and in the 'onReset' function allow the user to reload 
+ *                  the page again to get the component
+ * */ 
 
 function AllRoutes() {
      return (
           <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => { window.location.reload() }}>
-               <Suspense fallback={<Center h='100svh'><Spinner color='var(--primary-color)' thickness='4px' size='xl' /></Center>}>
+               <Suspense fallback={<Loading />}>
                     <Routes>
                          <Route exact path='/' element={<PrivateRoute><Board /></PrivateRoute>} />
                          <Route path='/signin' element={<Signin />} />
