@@ -74,6 +74,24 @@ export const signup = (cred, navigate, toastMsg) => async (dispatch) => {
 
      if (!cred.username || !cred.email || !cred.password) return;
 
+     // ? EMAIL VERIFIER
+     if (!cred.email.includes('@') || !cred.email.includes('mail')) {
+          toastMsg({
+               title: 'Enter a valid email address!',
+               status: 'warning'
+          })
+          return;
+     }
+
+     // ? PASSWORD VERIFIER
+     if (cred.password.length <= 5) {
+          toastMsg({
+               title: 'Password must contain more than 5 char!',
+               status: 'warning'
+          })
+          return;
+     }
+
      dispatch({ type: authTypes.AUTH_LOADING });
 
      try {
@@ -86,15 +104,15 @@ export const signup = (cred, navigate, toastMsg) => async (dispatch) => {
           })
 
           const data = await res.json();
-          
-          
+
+
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT })
                alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
           }
 
-          if(res.ok) navigate('/signin');
+          if (res.ok) navigate('/signin');
           dispatch({ type: res.ok ? authTypes.AUTH_SUCCESS : authTypes.AUTH_ERROR });
 
           toastMsg({

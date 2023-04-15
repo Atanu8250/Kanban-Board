@@ -29,6 +29,10 @@ export const reducer = (state = initialState, { type, payload }) => {
                return { loading: false, error: { status: false, message: '' }, data: payload };
           }
 
+          case taskTypes.DELETE_TASKS: {
+               return initialState
+          }
+
           default: return state;
      }
 }

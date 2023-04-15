@@ -10,7 +10,7 @@
 
   --primary-edit-color: #356eea;
   --primary-delete-color: #fb2727;
-  
+
   --primary-todo-color: #635fc7;
   --primary-doing-color: #ffa500;
   --primary-done-color: #008e28;
@@ -25,6 +25,12 @@ button {
   border-radius: 18px;
   background-color: var(--primary-color) !important;
   color: #fff !important;
+}
+
+input:focus {
+  border: none;
+  outline: none;
+  border-bottom: 1px solid var(--primary-color);
 }
 
 .sidebar {

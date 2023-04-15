@@ -56,6 +56,14 @@ export const getTasks = (boardId) => async (dispatch) => {
  * */
 export const postTask = (boardId, task, toastMsg) => async (dispatch) => {
 
+     if (boardId === undefined) {
+          toastMsg({
+               title: "Can't create Task!",
+               desc: "Select a board to create task inside it",
+               status: 'warning'
+          })
+     }
+
      if (!boardId || !task) return;
 
      dispatch({ type: taskTypes.TASKS_LOADING })

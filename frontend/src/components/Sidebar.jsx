@@ -26,8 +26,7 @@ function Sidebar() {
      const { loading, error, data: boards } = useSelector(store => store.boardManager);
 
      const handleCreateBoard = () => {
-          let boardName = newBoardNameRef.current.value || `Board ${boards.length + 1}`;
-          dispatch(createBoard(boardName))
+          dispatch(createBoard(newBoardNameRef.current.value))
           setCreateBoardOpt(false);
      }
 
@@ -38,7 +37,7 @@ function Sidebar() {
 
      const handleDeleteBoard = () => {
           dispatch(deleteBoard(deleteBoardRef.current))
-          setActiveBtn(1);
+          setActiveBtn(0);
           onClose();
      }
 
@@ -47,7 +46,7 @@ function Sidebar() {
      }, [])
 
      useEffect(() => {
-          boards.length && dispatch(getTasks(boards[((+activeBtn || 1) - 1)]._id))
+          boards.length && +activeBtn > 0 && dispatch(getTasks(boards[((+activeBtn || 1) - 1)]._id))
      }, [activeBtn])
 
      return (
@@ -75,7 +74,7 @@ function Sidebar() {
                                                        editBoardOpt === board._id ?
                                                             <HStack className='edit-board-input'>
                                                                  <BsGrid1X2 />
-                                                                 <input defaultValue={board.name} ref={editBoardNameRef} />
+                                                                 <input autoFocus defaultValue={board.name} ref={editBoardNameRef} />
                                                                  <HStack>
                                                                       <BsCheckLg onClick={() => handleEditBoard(board._id)} />
                                                                       <RxCross2 onClick={() => setEditBoardOpt(-1)} />
@@ -104,7 +103,7 @@ function Sidebar() {
 
                     {
                          createBoardOpt && (<HStack className='new-board-input'>
-                              <Input placeholder='Board Name' ref={newBoardNameRef} />
+                              <Input defaultValue={`Board ${boards.length + 1}`} ref={newBoardNameRef} />
                               <HStack>
                                    <BsCheckLg onClick={handleCreateBoard} />
                                    <RxCross2 onClick={() => setCreateBoardOpt(false)} />

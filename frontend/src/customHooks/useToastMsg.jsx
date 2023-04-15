@@ -8,9 +8,8 @@ function useToastMsg() {
                title,
                description: desc,
                status,
-               position: 'bottom-right',
-               variant: 'left-accent',
-               duration: 3000
+               position: 'top-right',
+               duration: 3500
           })
      }
 }

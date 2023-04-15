@@ -41,7 +41,6 @@ function Navbar() {
                status: status.value,
                subtask: subtasks.filter(e => e)
           }
-          console.log({ task });
 
           dispatch(postTask(data._id, task, toastMsg))
 

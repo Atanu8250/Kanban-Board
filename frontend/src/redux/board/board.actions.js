@@ -1,5 +1,6 @@
 import * as boardTypes from './board.types';
 import { AUTH_LOGOUT } from '../auth/auth.types';
+import { DELETE_TASKS } from '../tasks/tasks.types';
 
 
 /** 
@@ -104,7 +105,7 @@ export const editBoard = (boardId, boardName) => async (dispatch) => {
           } else {
                dispatch({ type: boardTypes.BOARD_ERROR, payload: data.message })
           }
-          
+
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT })
@@ -133,11 +134,12 @@ export const deleteBoard = (boardId) => async (dispatch) => {
           const data = await res.json();
 
           if (res.ok) {
-               dispatch(getBoards())
+               dispatch({ type: DELETE_TASKS });
+               dispatch(getBoards());
           } else {
                dispatch({ type: boardTypes.BOARD_ERROR, payload: data.message })
           }
-          
+
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT })

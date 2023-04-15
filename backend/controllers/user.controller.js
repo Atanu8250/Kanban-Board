@@ -1,6 +1,7 @@
 const { UserModel } = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const BoardModel = require("../models/board.model");
 require("dotenv").config();
 
 const userSignin = async (req, res) => {
@@ -49,6 +50,11 @@ const userSignUp = async (req, res) => {
                          try {
                               const user = new UserModel({ username, email, password: hash });
                               await user.save();
+
+                              // ? Creating a board for first time signed-up user
+                              const board = new BoardModel({ name: 'Board 1', user: user._id })
+                              await board.save();
+
                               res.status(201).send({
                                    message: "Sign-up Sccessful"
                               })

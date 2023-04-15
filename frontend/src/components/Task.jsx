@@ -45,21 +45,20 @@ function Task({ t }) {
 
      const handleEditName = () => {
           if (editNameRef.current.value !== title) {
-               console.log(editNameRef.current.value);
                dispatch(updateTask(taskId, boardId, { title: editNameRef.current.value }, toastMsg));
+               setEditName(false)
           }
      }
 
      const handleEditDesc = () => {
           if (editDescRef.current.value !== description) {
-               console.log(editDescRef.current.value);
                dispatch(updateTask(taskId, boardId, { description: editDescRef.current.value }, toastMsg));
+               setEditDesc(false);
           }
      }
 
      const handleEditSubtaskName = (oldSubTaskTitle) => {
           if (editSubtaskRef.current.value !== oldSubTaskTitle) {
-               console.log(editSubtaskRef.current.value);
                dispatch(updateSubTask(editSubtask, boardId, { title: editSubtaskRef.current.value }, toastMsg));
                setEditSubtask(-1);
           }
@@ -87,7 +86,7 @@ function Task({ t }) {
      return (
           <>
                <Box className='task' onClick={onOpen}>
-                    <Text className='task-heading'>{title}</Text>
+                    <Text className='task-heading'>{description}</Text>
                     <Text className='subtask-info'>
                          {subtask.filter(e => e.isCompleted).length} of {subtask.length} subtasks
                     </Text>
@@ -100,7 +99,7 @@ function Task({ t }) {
                               {
                                    editName ?
                                         <HStack className='task-input'>
-                                             <input defaultValue={title} ref={editNameRef} />
+                                             <input autoFocus defaultValue={title} ref={editNameRef} />
                                              <HStack>
                                                   <BsCheckLg onClick={handleEditName} />
                                                   <RxCross2 onClick={() => setEditName(false)} />
@@ -117,7 +116,7 @@ function Task({ t }) {
                               {
                                    editDesc ?
                                         <HStack className='task-input'>
-                                             <input defaultValue={description} ref={editDescRef} />
+                                             <input autoFocus defaultValue={description} ref={editDescRef} />
                                              <HStack>
                                                   <BsCheckLg onClick={handleEditDesc} />
                                                   <RxCross2 onClick={() => setEditDesc(false)} />
@@ -141,7 +140,7 @@ function Task({ t }) {
                                                   {
                                                        editSubtask === e._id ?
                                                             <>
-                                                                 <input type='text' defaultValue={e.title} ref={editSubtaskRef} />
+                                                                 <input type='text' autoFocus defaultValue={e.title} ref={editSubtaskRef} />
                                                                  <HStack>
                                                                       <BsCheckLg onClick={() => handleEditSubtaskName(e.title)} />
                                                                       <RxCross2 onClick={() => setEditSubtask(-1)} />
