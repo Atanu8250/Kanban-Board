@@ -1,5 +1,6 @@
 import * as authTypes from './auth.types';
 
+let savedNavigate, savedToastMsg;
 /** 
  * * Using 'fetch' instead of 'axios' because when I'm sending error from the backend at
  * * that time axios is not able to catch the response messages with error status codes
@@ -19,6 +20,12 @@ import * as authTypes from './auth.types';
  * */
 
 export const signin = (cred, navigate, toastMsg) => async (dispatch) => {
+     if (toastMsg) savedToastMsg = toastMsg;
+     else toastMsg = savedToastMsg;
+
+     if (navigate) savedNavigate = navigate;
+     else navigate = savedNavigate;
+
 
      if (!cred.email || !cred.password) return;
 
@@ -38,7 +45,8 @@ export const signin = (cred, navigate, toastMsg) => async (dispatch) => {
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT })
-               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               alert(`Session Expired! \n Please Login again.. ${navigate ? navigate('/signin') : window.location.replace('/signin')}`)
+               return;
           }
 
           if (res.ok) {
@@ -71,6 +79,11 @@ export const signin = (cred, navigate, toastMsg) => async (dispatch) => {
  * In the 'toastMsg' we're passing the returned function by the 'useToastMsg' custom-hook
  * */
 export const signup = (cred, navigate, toastMsg) => async (dispatch) => {
+     if (toastMsg) savedToastMsg = toastMsg;
+     else toastMsg = savedToastMsg;
+
+     if (navigate) savedNavigate = navigate;
+     else navigate = savedNavigate;
 
      if (!cred.username || !cred.email || !cred.password) return;
 
@@ -109,7 +122,8 @@ export const signup = (cred, navigate, toastMsg) => async (dispatch) => {
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT })
-               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               alert(`Session Expired! \n Please Login again.. ${navigate ? navigate('/signin') : window.location.replace('/signin')}`)
+               return;
           }
 
           if (res.ok) navigate('/signin');

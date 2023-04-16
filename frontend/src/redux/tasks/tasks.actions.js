@@ -9,13 +9,14 @@ import * as taskTypes from './tasks.types';
  * * the data we need to do 'response.json()'
  * */
 
-
+let savedNavigate, savedToastMsg;
 
 /**
  * Pass the boardId for which we need the tasks then it will store 
  * the tasks in task's state for the specific board;
  * */
-export const getTasks = (boardId) => async (dispatch) => {
+export const getTasks = (boardId, navigate) => async (dispatch) => {
+     savedNavigate = navigate;
 
      if (!boardId) return;
 
@@ -33,7 +34,7 @@ export const getTasks = (boardId) => async (dispatch) => {
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT })
-               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               alert(`Session Expired! \n Please Login again.. ${savedNavigate ? savedNavigate('/signin') : window.location.replace('/signin')}`)
                return;
           }
 
@@ -55,6 +56,8 @@ export const getTasks = (boardId) => async (dispatch) => {
  * 'toastMsg' is optional.
  * */
 export const postTask = (boardId, task, toastMsg) => async (dispatch) => {
+     if (toastMsg) savedToastMsg = toastMsg;
+     else toastMsg = savedToastMsg;
 
      if (boardId === undefined) {
           toastMsg({
@@ -82,7 +85,7 @@ export const postTask = (boardId, task, toastMsg) => async (dispatch) => {
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT })
-               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               alert(`Session Expired! \n Please Login again.. ${savedNavigate ? savedNavigate('/signin') : window.location.replace('/signin')}`)
                return;
           }
 
@@ -115,6 +118,8 @@ export const postTask = (boardId, task, toastMsg) => async (dispatch) => {
  * 'toastMsg' is optional
  * */
 export const updateTask = (taskId, boardId, updates, toastMsg) => async (dispatch) => {
+     if (toastMsg) savedToastMsg = toastMsg;
+     else toastMsg = savedToastMsg;
 
      if (!taskId || !boardId || !updates) return;
 
@@ -134,7 +139,7 @@ export const updateTask = (taskId, boardId, updates, toastMsg) => async (dispatc
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT })
-               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               alert(`Session Expired! \n Please Login again.. ${savedNavigate ? savedNavigate('/signin') : window.location.replace('/signin')}`)
                return;
           }
 
@@ -167,6 +172,8 @@ export const updateTask = (taskId, boardId, updates, toastMsg) => async (dispatc
  * 'toastMsg' is optional.
  * */
 export const deleteTask = (taskId, boardId, toastMsg) => async (dispatch) => {
+     if (toastMsg) savedToastMsg = toastMsg;
+     else toastMsg = savedToastMsg;
 
      if (!taskId || !boardId) return;
 
@@ -186,7 +193,7 @@ export const deleteTask = (taskId, boardId, toastMsg) => async (dispatch) => {
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT })
-               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               alert(`Session Expired! \n Please Login again.. ${savedNavigate ? savedNavigate('/signin') : window.location.replace('/signin')}`)
                return;
           }
 
@@ -220,6 +227,8 @@ export const deleteTask = (taskId, boardId, toastMsg) => async (dispatch) => {
  * 'toastMsg' is optional.
  * */
 export const postSubTask = (taskId, boardId, subTasks, toastMsg) => async (dispatch) => {
+     if (toastMsg) savedToastMsg = toastMsg;
+     else toastMsg = savedToastMsg;
 
      if (!taskId || !boardId || !subTasks || !subTasks.length) return;
 
@@ -239,7 +248,7 @@ export const postSubTask = (taskId, boardId, subTasks, toastMsg) => async (dispa
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT })
-               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               alert(`Session Expired! \n Please Login again.. ${savedNavigate ? savedNavigate('/signin') : window.location.replace('/signin')}`)
                return;
           }
 
@@ -272,6 +281,8 @@ export const postSubTask = (taskId, boardId, subTasks, toastMsg) => async (dispa
  * 'toastMsg' is optional
  * */
 export const updateSubTask = (subTaskId, boardId, updates, toastMsg) => async (dispatch) => {
+     if (toastMsg) savedToastMsg = toastMsg;
+     else toastMsg = savedToastMsg;
 
      if (!subTaskId || !boardId || !updates) return;
 
@@ -291,7 +302,7 @@ export const updateSubTask = (subTaskId, boardId, updates, toastMsg) => async (d
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT })
-               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               alert(`Session Expired! \n Please Login again.. ${savedNavigate ? savedNavigate('/signin') : window.location.replace('/signin')}`)
                return;
           }
 
@@ -325,6 +336,8 @@ export const updateSubTask = (subTaskId, boardId, updates, toastMsg) => async (d
  * 'toastMsg' is optional.
  * */
 export const deleteSubTask = (subTaskId, taskId, boardId, toastMsg) => async (dispatch) => {
+     if (toastMsg) savedToastMsg = toastMsg;
+     else toastMsg = savedToastMsg;
 
      if (!subTaskId || !taskId || !boardId) return;
 
@@ -344,7 +357,7 @@ export const deleteSubTask = (subTaskId, taskId, boardId, toastMsg) => async (di
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT })
-               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               alert(`Session Expired! \n Please Login again.. ${savedNavigate ? savedNavigate('/signin') : window.location.replace('/signin')}`)
                return;
           }
 

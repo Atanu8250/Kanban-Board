@@ -12,9 +12,11 @@ import { DELETE_TASKS } from '../tasks/tasks.types';
  * * the data we need to do 'response.json()'
  * */
 
+let savedNavigate;
 
 // Get Boards names based on the logged-in user
-export const getBoards = () => async (dispatch) => {
+export const getBoards = (navigate) => async (dispatch) => {
+     savedNavigate = navigate;
 
      dispatch({ type: boardTypes.BOARD_LOADING })
 
@@ -36,7 +38,7 @@ export const getBoards = () => async (dispatch) => {
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT });
-               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`);
+               alert(`Session Expired! \n Please Login again.. ${savedNavigate ? savedNavigate('/signin') : window.location.replace('/signin')}`);
                return;
           }
      } catch (error) {
@@ -72,7 +74,7 @@ export const createBoard = (boardName) => async (dispatch) => {
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT });
-               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`);
+               alert(`Session Expired! \n Please Login again.. ${savedNavigate ? savedNavigate('/signin') : window.location.replace('/signin')}`);
                return;
           }
      } catch (error) {
@@ -109,7 +111,7 @@ export const editBoard = (boardId, boardName) => async (dispatch) => {
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT })
-               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               alert(`Session Expired! \n Please Login again.. ${savedNavigate ? savedNavigate('/signin') : window.location.replace('/signin')}`)
                return;
           }
      } catch (error) {
@@ -143,7 +145,7 @@ export const deleteBoard = (boardId) => async (dispatch) => {
           // * IF TOKEN EXPIRED
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT })
-               alert(`Session Expired! \n Please Login again.. ${window.location.replace('/signin')}`)
+               alert(`Session Expired! \n Please Login again.. ${savedNavigate ? savedNavigate('/signin') : window.location.replace('/signin')}`)
                return;
           }
      } catch (error) {

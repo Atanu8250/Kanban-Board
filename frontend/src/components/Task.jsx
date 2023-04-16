@@ -22,6 +22,7 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import useToastMsg from '../customHooks/useToastMsg';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteSubTask, deleteTask, updateSubTask, updateTask } from '../redux/tasks/tasks.actions';
+import { Draggable } from 'react-beautiful-dnd';
 
 // Get local date and time
 function getDateAndTime(createdAt) {
@@ -31,7 +32,7 @@ function getDateAndTime(createdAt) {
 }
 
 
-function Task({ t }) {
+function Task({ t, index }) {
      const { _id: taskId, title, description, status, subtask, createdAt } = t;
      const { date, time } = useMemo(() => getDateAndTime(createdAt), [createdAt]);
 
@@ -90,15 +91,24 @@ function Task({ t }) {
           dispatch(deleteSubTask(subtaskId, taskId, boardId, toastMsg))
      }
 
-
      return (
           <>
-               <Box className='task' onClick={onOpen}>
-                    <Text className='task-heading'>{description}</Text>
-                    <Text className='subtask-info'>
-                         {subtask.filter(e => e.isCompleted).length} of {subtask.length} subtasks
-                    </Text>
-               </Box>
+               <Draggable draggableId={taskId} index={index}>
+                    {
+                         (provided, snapshot) => <Box
+                              className={`task ${snapshot.isDragging && 'dragging-task'}`}
+                              onClick={onOpen}
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                         >
+                              <Text className='task-heading'>{description}</Text>
+                              <Text className='subtask-info'>
+                                   {subtask.filter(e => e.isCompleted).length} of {subtask.length} subtasks
+                              </Text>
+                         </Box>
+                    }
+               </Draggable>
 
                <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
                     <ModalOverlay />
@@ -183,7 +193,7 @@ function Task({ t }) {
                                         <option value="Done">✔ Done</option>
                                    </Select>
                               </div>
-                              <HStack color='gray' fontSize='12px'>
+                              <HStack color='gray.600' fontSize='12px'>
                                    <bdi>Created at:</bdi>
                                    <Text>{date}  | 🕖 {time}</Text>
                               </HStack>

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CiEdit } from 'react-icons/ci';
 import { RxCross2 } from 'react-icons/rx';
 import { AiOutlinePlus } from 'react-icons/ai';
@@ -12,6 +13,7 @@ import Error from './Error';
 import { getTasks } from '../redux/tasks/tasks.actions';
 
 function Sidebar() {
+     const navigate = useNavigate()
      const newBoardNameRef = useRef();
      const editBoardNameRef = useRef();
      const deleteBoardRef = useRef();
@@ -44,11 +46,11 @@ function Sidebar() {
      }
 
      useEffect(() => {
-          dispatch(getBoards())
+          dispatch(getBoards(navigate))
      }, [])
 
      useEffect(() => {
-          boards.length && +activeBtn > 0 && dispatch(getTasks(boards[((+activeBtn || 1) - 1)]._id))
+          boards.length && +activeBtn > 0 && dispatch(getTasks(boards[((+activeBtn || 1) - 1)]._id, navigate))
      }, [activeBtn])
 
      return (

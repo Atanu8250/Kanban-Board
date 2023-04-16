@@ -58,11 +58,11 @@ input:focus {
 }
 
 .board-controller>svg:first-child {
-  color: rgb(54, 155, 255);
+  color: #369bff;
 }
 
 .board-controller>svg:last-child {
-  color: rgb(255, 86, 86);
+  color: #ff5656;
 }
 
 .skeleton-board-option {
@@ -136,6 +136,16 @@ input:focus {
   padding-bottom: 25px;
 }
 
+.loading-overlay{
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+}
+
 .tasks {
   min-height: 90svh;
   width: 100%;
@@ -143,7 +153,7 @@ input:focus {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
-  padding: 20px;
+  padding: 15px;
 }
 
 .task-section {
@@ -151,6 +161,8 @@ input:focus {
   flex-direction: column;
   align-items: flex-start;
   gap: 20px;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 .task-section>p:first-child {
@@ -180,13 +192,28 @@ input:focus {
   margin: 0px;
 }
 
+
+.task-dragging-over {
+  background-color: #625fc71f;
+}
+
+.task-loading {
+  background-color: white;
+  padding: 15px 20px;
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .task {
   padding: 15px 20px;
   border-radius: 8px;
   background-color: #fff;
   width: 100%;
-  cursor: pointer;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  transition: box-shadow 200ms ease;
 }
 
 .task-input>input {
@@ -201,13 +228,17 @@ input:focus {
   font-weight: 700;
 }
 
+.dragging-task {
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+}
+
+
 .subtask-info {
   font-size: 14px;
   color: rgb(142, 142, 142);
   font-weight: 500;
   letter-spacing: 0.5px;
 }
-
 
 .subtask {
   display: flex;

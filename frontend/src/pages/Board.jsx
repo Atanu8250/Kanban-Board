@@ -1,18 +1,32 @@
-import React, { Suspense } from 'react';
-import { useSelector } from 'react-redux'
-import { ErrorBoundary } from 'react-error-boundary';
+import { DragDropContext } from 'react-beautiful-dnd';
+import { useDispatch, useSelector } from 'react-redux';
 import { Box, Center, Flex, Heading, Image, VStack } from '@chakra-ui/react';
 
 import lazyLoad from '../lazyLoad';
 import Navbar from '../components/Navbar';
-import Loading from '../components/Loading';
 import Sidebar from '../components/Sidebar';
+
+// Paths are set relative to the lazyLoad file
 const Error = lazyLoad('./components/Error');
-import TaskSection from '../components/TaskSection';
-import ErrorFallback from '../components/ErrorFallback';
+const TaskSection = lazyLoad('./components/TaskSection');
+
+// import TaskSection from '../components/TaskSection';
+import { updateTask } from '../redux/tasks/tasks.actions';
+import useToastMsg from '../customHooks/useToastMsg';
+import LazyLoadHandler from '../components/LazyLoadHandler';
+import LoadingTask from '../components/LoadingTask';
 
 function Board() {
-     const { error, data: board } = useSelector(store => store.tasksManager)
+     const { loading, error, data: board } = useSelector(store => store.tasksManager)
+     const dispatch = useDispatch()
+     const toastMsg = useToastMsg();
+
+     const handleDragEnd = (result) => {
+          const { destination, source, draggableId } = result;
+          if (!result || !destination || (source.droppableId === destination.droppableId)) return;
+          dispatch(updateTask(draggableId, board._id, { status: destination.droppableId.split("_")[0] }, toastMsg))
+     }
+
      return (
           <>
                <Navbar />
@@ -23,28 +37,28 @@ function Board() {
                     </Box>
                     {
                          error.status ? (
-                              <ErrorBoundary FallbackComponent={ErrorFallback}>
-                                   <Suspense fallback={<Loading />}>
-                                        <Center>
-                                             <Error>
-                                                  <Heading size="md">{error.message}</Heading>
-                                             </Error>
-                                        </Center>
-                                   </Suspense>
-                              </ErrorBoundary>
+                              <LazyLoadHandler>
+                                   <Center>
+                                        <Error>
+                                             <Heading size="md">{error.message}</Heading>
+                                        </Error>
+                                   </Center>
+                              </LazyLoadHandler>
                          ) :
                               board.tasks ?
                                    (
-                                        <Box className='tasks'>
-                                             {/* Todo-section */}
-                                             < TaskSection title='Todo' />
-
-                                             {/* Doing-section */}
-                                             <TaskSection title='Doing' />
-
-                                             {/* Done-section */}
-                                             <TaskSection title='Done' />
-                                        </Box>
+                                        <>
+                                             <DragDropContext onDragEnd={handleDragEnd}>
+                                                  <Box className='tasks'>
+                                                       {loading && <div className='loading-overlay'></div>}
+                                                       {
+                                                            ['Todo', 'Doing', 'Done'].map((el, ind) => <LazyLoadHandler suspenceFallback={<LoadingTask />} key={ind}>
+                                                                 < TaskSection title={el} />
+                                                            </LazyLoadHandler>)
+                                                       }
+                                                  </Box>
+                                             </DragDropContext>
+                                        </>
 
                                    ) :
                                    (

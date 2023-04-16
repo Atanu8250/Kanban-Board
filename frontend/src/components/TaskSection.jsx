@@ -1,7 +1,9 @@
-import { Text, Box } from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux';
+import { Text, Box } from '@chakra-ui/react';
+import { Droppable } from 'react-beautiful-dnd';
+import React, { useEffect, useState } from 'react';
+
 import Task from './Task'
-import { useSelector } from 'react-redux'
 
 function TaskSection({ title }) {
      const { data: board } = useSelector(store => store.tasksManager);
@@ -16,12 +18,21 @@ function TaskSection({ title }) {
           getFilteredTasks();
      }, [board])
 
-     return (<Box className='task-section'>
-          <Text className='subHeading-text' data-title={title}>{title} ({filteredTasks?.length})</Text>
-          {
-               filteredTasks?.map((el, i) => <Task key={i} t={el} />)
+     return (<Droppable droppableId={title + "_section"}>
+          {(provided, snapshot) =>
+               <Box
+                    className={`task-section ${snapshot.isDraggingOver && 'task-dragging-over'}`}
+                    ref={provided.innerRef}
+                    {...provided.droppableProps}
+               >
+                    <Text className='subHeading-text' data-title={title}>{title} ({filteredTasks?.length})</Text>
+                    {
+                         filteredTasks?.map((el, i) => <Task key={i} t={el} index={i} />)
+                    }
+                    {provided.placeholder}
+               </Box>
           }
-     </Box>)
+     </Droppable>)
 }
 
 export default TaskSection

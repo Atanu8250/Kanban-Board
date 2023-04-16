@@ -1,10 +1,7 @@
 import lazyLoad from '../lazyLoad';
-import React, { Suspense } from 'react';
 import PrivateRoute from './PrivateRoute';
-import Loading from '../components/Loading';
 import { Route, Routes } from 'react-router-dom';
-import { ErrorBoundary } from 'react-error-boundary'
-import ErrorFallback from '../components/ErrorFallback';
+import LazyLoadHandler from '../components/LazyLoadHandler';
 
 const NotFound = lazyLoad('./pages/NotFound');
 const Signin = lazyLoad('./pages/Signin');
@@ -19,20 +16,18 @@ const Board = lazyLoad('./pages/Board');
  *                  then this 'ErrorBoundary' will show the 'FallbackComponent' to 
  *                  the user and in the 'onReset' function allow the user to reload 
  *                  the page again to get the component
- * */ 
+ * */
 
 function AllRoutes() {
      return (
-          <ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => { window.location.reload() }}>
-               <Suspense fallback={<Loading />}>
-                    <Routes>
-                         <Route exact path='/' element={<PrivateRoute><Board /></PrivateRoute>} />
-                         <Route path='/signin' element={<Signin />} />
-                         <Route path='/signup' element={<Signup />} />
-                         <Route path='*' element={<NotFound />} />
-                    </Routes>
-               </Suspense>
-          </ErrorBoundary>
+          <LazyLoadHandler>
+               <Routes>
+                    <Route exact path='/' element={<PrivateRoute><Board /></PrivateRoute>} />
+                    <Route path='/signin' element={<Signin />} />
+                    <Route path='/signup' element={<Signup />} />
+                    <Route path='*' element={<NotFound />} />
+               </Routes>
+          </LazyLoadHandler>
      )
 }
 
