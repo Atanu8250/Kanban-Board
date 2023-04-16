@@ -10,7 +10,6 @@ import Sidebar from '../components/Sidebar';
 const Error = lazyLoad('./components/Error');
 const TaskSection = lazyLoad('./components/TaskSection');
 
-// import TaskSection from '../components/TaskSection';
 import { updateTask } from '../redux/tasks/tasks.actions';
 import useToastMsg from '../customHooks/useToastMsg';
 import LazyLoadHandler from '../components/LazyLoadHandler';
