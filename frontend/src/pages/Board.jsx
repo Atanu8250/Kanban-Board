@@ -10,10 +10,10 @@ import Sidebar from '../components/Sidebar';
 const Error = lazyLoad('./components/Error');
 const TaskSection = lazyLoad('./components/TaskSection');
 
-import { updateTask } from '../redux/tasks/tasks.actions';
-import useToastMsg from '../customHooks/useToastMsg';
-import LazyLoadHandler from '../components/LazyLoadHandler';
 import LoadingTask from '../components/LoadingTask';
+import useToastMsg from '../customHooks/useToastMsg';
+import { updateTask } from '../redux/tasks/tasks.actions';
+import LazyLoadHandler from '../components/LazyLoadHandler';
 
 function Board() {
      const { loading, error, data: board } = useSelector(store => store.tasksManager)

@@ -147,6 +147,7 @@ input:focus {
 }
 
 .tasks {
+  position: relative;
   min-height: 90svh;
   width: 100%;
   background-color: var(--primary-bg-color);

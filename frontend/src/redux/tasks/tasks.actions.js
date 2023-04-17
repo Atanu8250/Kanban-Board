@@ -1,4 +1,6 @@
 import * as taskTypes from './tasks.types';
+let abortController;
+export { abortController };
 
 /** 
  * * Using 'fetch' instead of 'axios' because when I'm sending error from the backend at
@@ -22,8 +24,13 @@ export const getTasks = (boardId, navigate) => async (dispatch) => {
 
      dispatch({ type: taskTypes.TASKS_LOADING })
 
+     abortController?.abort();
+     
+     abortController = new AbortController();
+
      try {
           const res = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/board/${boardId}`, {
+               signal: abortController.signal,
                method: "GET",
                headers: {
                     'authorization': sessionStorage.getItem("TOKEN"),
