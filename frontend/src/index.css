@@ -136,7 +136,7 @@ input:focus {
   padding-bottom: 25px;
 }
 
-.loading-overlay{
+.loading-overlay {
   height: 100%;
   width: 100%;
   position: absolute;
@@ -347,6 +347,87 @@ input:focus {
   color: var(--primary-doing-color) !important;
 }
 
+
 .input-div select>option[value='Done'] {
   color: var(--primary-done-color) !important;
+}
+
+
+/* Tablet-screen */
+@media screen and (width <=768px) {
+  .sidebar {
+    width: 20rem;
+  }
+
+  .board-option {
+    padding-left: 5% !important;
+  }
+
+  .new-board-btn {
+    margin: 20px 0px 0px 5% !important;
+  }
+
+  .tasks {
+    gap: 15px;
+    padding: 10px;
+  }
+
+  .task {
+    padding: 8px 10px;
+    border-radius: 5px;
+  }
+}
+
+@media screen and (width <=693px) {
+  .container {
+    flex-direction: column !important;
+  }
+
+  .board-option {
+    padding-left: 2% !important;
+  }
+
+  .new-board-input {
+    margin: 0px !important;
+  }
+
+  .sidebar {
+    width: 100%;
+    min-height: fit-content;
+    padding: 5px 0px;
+    overflow-x: scroll;
+  }
+
+  .sidebar>div {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 0px 10px;
+    width: fit-content;
+  }
+
+  .sidebar>div>button {
+    margin-top: 0 !important;
+  }
+
+  .sidebar .subHeading-text {
+    display: none;
+  }
+
+  .new-board-btn {
+    margin: 0 !important;
+  }
+
+  .board-option {
+    border-radius: 5px !important;
+    width: 10rem;
+  }
+
+  .sidebar>div>button:last-child p {
+    display: none;
+  }
+
+  .tasks{
+    grid-template-columns: 100%;
+  }
 }

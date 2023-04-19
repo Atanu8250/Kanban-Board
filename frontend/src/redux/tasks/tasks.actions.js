@@ -1,6 +1,5 @@
 import * as taskTypes from './tasks.types';
 let abortController;
-export { abortController };
 
 /** 
  * * Using 'fetch' instead of 'axios' because when I'm sending error from the backend at

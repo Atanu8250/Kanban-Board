@@ -30,7 +30,7 @@ function Board() {
           <>
                <Navbar />
 
-               <Flex>
+               <Flex className='container'>
                     <Box className='sidebar'>
                          <Sidebar />
                     </Box>
@@ -64,7 +64,7 @@ function Board() {
                                         <Center>
                                              <VStack>
                                                   <Image w="80%" src="https://learncab.com/assets/images/no-data-found.png" />
-                                                  <Heading color='var(--primary-color)'>SELECT A BOARD TO SEE THE DATA</Heading>
+                                                  <Heading color='var(--primary-color)' textAlign="center">SELECT A BOARD TO SEE THE DATA</Heading>
                                              </VStack>
                                         </Center>
                                    )

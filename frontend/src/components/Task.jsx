@@ -102,7 +102,7 @@ function Task({ t, index }) {
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                          >
-                              <Text className='task-heading'>{description}</Text>
+                              <Text className='task-heading' noOfLines={2} cursor='pointer'>{description}</Text>
                               <Text className='subtask-info'>
                                    {subtask.filter(e => e.isCompleted).length} of {subtask.length} subtasks
                               </Text>

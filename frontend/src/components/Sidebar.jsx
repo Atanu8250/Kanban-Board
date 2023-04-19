@@ -50,6 +50,7 @@ function Sidebar() {
      }, [])
 
      useEffect(() => {
+          // ? short-circutting
           boards.length && +activeBtn > 0 && dispatch(getTasks(boards[((+activeBtn || 1) - 1)]._id, navigate))
      }, [activeBtn])
 
@@ -118,7 +119,7 @@ function Sidebar() {
                     <Button className='new-board-btn' onClick={() => setCreateBoardOpt(!createBoardOpt)}>
                          <HStack>
                               {createBoardOpt ? <RxCross2 /> : <AiOutlinePlus />}
-                              <Text>{createBoardOpt ? 'Close create Option' : 'create New Board'}</Text>
+                              <Text>{createBoardOpt ? 'Close create Option' : 'Create New Board'}</Text>
                          </HStack>
                     </Button>
                </VStack >

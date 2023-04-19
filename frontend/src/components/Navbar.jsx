@@ -71,8 +71,8 @@ function Navbar() {
                     <Box p='2'>
                          <NavLink to="/">
                               <HStack>
-                                   <FaTasks />
-                                   <Heading size='md'>Kanban Board</Heading>
+                                   <FaTasks fontSize="20px" />
+                                   <Heading display={{base: 'none', sm: 'inline-block'}} size='md'>Kanban Board</Heading>
                               </HStack>
                          </NavLink>
                     </Box>
