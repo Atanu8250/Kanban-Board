@@ -4,6 +4,7 @@ import { Route, Routes } from 'react-router-dom';
 import LazyLoadHandler from '../components/LazyLoadHandler';
 import { lazy } from 'react';
 
+// ! LazyLoad function is not working in deployment 
 // Paths are set relative to the lazyLoad file
 // const NotFound = lazyLoad('./pages/NotFound');
 // const Signin = lazyLoad('./pages/Signin');

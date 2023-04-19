@@ -7,6 +7,7 @@ import { Box, Center, Flex, Heading, Image, VStack } from '@chakra-ui/react';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 
+// ! LazyLoad function is not working in deployment 
 // Paths are set relative to the lazyLoad file
 // const Error = lazyLoad('./components/Error');
 // const TaskSection = lazyLoad('./components/TaskSection');
