@@ -1,14 +1,18 @@
+import { lazy } from 'react';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Center, Flex, Heading, Image, VStack } from '@chakra-ui/react';
 
-import lazyLoad from '../lazyLoad';
+// import lazyLoad from '../lazyLoad';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 
 // Paths are set relative to the lazyLoad file
-const Error = lazyLoad('./components/Error');
-const TaskSection = lazyLoad('./components/TaskSection');
+// const Error = lazyLoad('./components/Error');
+// const TaskSection = lazyLoad('./components/TaskSection');
+
+const Error = lazy(()=> import('../components/Error'));
+const TaskSection = lazy(() => import('../components/TaskSection'));
 
 import LoadingTask from '../components/LoadingTask';
 import useToastMsg from '../customHooks/useToastMsg';
