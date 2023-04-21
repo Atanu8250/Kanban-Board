@@ -1,5 +1,5 @@
 <!-- https://user-images.githubusercontent.com/94675329/233132228-987af021-4518-44d1-a2b8-b83cbc109464.PNG -->
-# Kanban-Board (Full Stack Project)
+# <img width="25px" src="https://notion-emojis.s3-us-west-2.amazonaws.com/prod/svg-twitter/1f4cb.svg"/> Kanban-Board (Full Stack Project)
 It's a Full-Stack Individual Project developed within 2 Days
 
 
