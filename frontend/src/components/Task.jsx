@@ -10,19 +10,27 @@ import {
      useDisclosure,
      Select,
      HStack,
+     Button,
+     Textarea,
+     Spinner,
 } from '@chakra-ui/react';
 
 import { TbEdit } from 'react-icons/tb';
 import { RxCross2 } from 'react-icons/rx';
 import { MdDelete } from 'react-icons/md';
 import { BsCheckLg } from 'react-icons/bs';
+import { MdAutoAwesome } from 'react-icons/md';
+import { motion } from 'framer-motion';
 
 import React, { useMemo, useRef, useState } from 'react';
 import { RiDeleteBin6Line } from 'react-icons/ri';
 import useToastMsg from '../customHooks/useToastMsg';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteSubTask, deleteTask, updateSubTask, updateTask } from '../redux/tasks/tasks.actions';
+import { deleteSubTask, deleteTask, updateSubTask, updateTask, generateDescriptionForTask } from '../redux/tasks/tasks.actions';
 import { Draggable } from 'react-beautiful-dnd';
+
+// Motion wrapper for animated button
+const MotionButton = motion(Button);
 
 // Get local date and time
 function getDateAndTime(createdAt) {
@@ -50,6 +58,7 @@ function Task({ t, index }) {
      const [editName, setEditName] = useState(false);
      const [editDesc, setEditDesc] = useState(false);
      const [editSubtask, setEditSubtask] = useState(-1);
+     const [isGenerating, setIsGenerating] = useState(false);
 
 
      const handleEditName = () => {
@@ -90,6 +99,22 @@ function Task({ t, index }) {
 
      const handleSubtaskDelete = (subtaskId) => {
           dispatch(deleteSubTask(subtaskId, taskId, boardId, toastMsg))
+     }
+
+
+     const handleGenerateDescForTask = async () => {
+          if (!title) {
+               toastMsg({
+                    title: "Task title is required",
+                    desc: "Please add a task name before generating description",
+                    status: 'warning'
+               })
+               return;
+          }
+          setIsGenerating(true);
+          const generated = await dispatch(generateDescriptionForTask(title));
+          if (generated && editDescRef.current) editDescRef.current.value = generated;
+          setIsGenerating(false);
      }
 
      return (
@@ -134,18 +159,50 @@ function Task({ t, index }) {
                          <ModalBody>
                               {
                                    editDesc ?
-                                        <HStack className='task-input'>
-                                             <input autoFocus defaultValue={description} ref={editDescRef} />
-                                             <HStack>
-                                                  <BsCheckLg onClick={handleEditDesc} />
-                                                  <RxCross2 onClick={() => setEditDesc(false)} />
+                                        <Box className='task-input'>
+                                             <HStack mb='2' justifyContent='space-between'>
+                                                  <Text fontWeight='600'>Description</Text>
+                                                  <MotionButton
+                                                       isDisabled={isGenerating}
+                                                       onClick={handleGenerateDescForTask}
+                                                       size='xs'
+                                                       bg='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                                                       color='white'
+                                                       _hover={!isGenerating ? {
+                                                            bg: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
+                                                            boxShadow: '0 0 15px rgba(102, 126, 234, 0.5)',
+                                                       } : {}}
+                                                       fontWeight='600'
+                                                       fontSize='xs'
+                                                       padding='4px 8px'
+                                                       title='Generate description with AI'
+                                                  >
+                                                       {isGenerating ? (
+                                                            <>
+                                                                 <Spinner size='xs' color='white' />
+                                                                 <Text ml='1'>Generating...</Text>
+                                                            </>
+                                                       ) : (
+                                                            <>
+                                                                 <MdAutoAwesome size={14} />
+                                                                 <Text ml='1'>AI Generate</Text>
+                                                            </>
+                                                       )}
+                                                  </MotionButton>
                                              </HStack>
-                                        </HStack> :
-                                        <HStack justifyContent='space-between'>
+                                             <Textarea autoFocus defaultValue={description} ref={editDescRef} rows={4} mb='2' />
+                                             <HStack>
+                                                  <BsCheckLg onClick={handleEditDesc} cursor='pointer' color='var(--primary-color)' fontSize='18px' />
+                                                  <RxCross2 onClick={() => setEditDesc(false)} cursor='pointer' color='#f56565' fontSize='18px' />
+                                             </HStack>
+                                        </Box> :
+                                        <HStack justifyContent='space-between' alignItems='flex-start'>
                                              <Text onDoubleClick={() => setEditDesc(true)}>{description}</Text>
-                                             <TbEdit
-                                                  color='var(--primary-edit-color)'
-                                                  onClick={() => setEditDesc(true)} />
+                                             <HStack gap='2'>
+                                                  <TbEdit
+                                                       color='var(--primary-edit-color)'
+                                                       onClick={() => setEditDesc(true)} />
+                                             </HStack>
                                         </HStack>
                               }
 

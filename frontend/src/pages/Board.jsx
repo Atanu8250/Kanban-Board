@@ -66,9 +66,9 @@ function Board() {
 
                                    ) :
                                    (
-                                        <Center>
+                                        <Center w="100%">
                                              <VStack>
-                                                  <Image w="80%" src="https://learncab.com/assets/images/no-data-found.png" />
+                                                  <Image w="100%" src="https://i.ibb.co/JWFkD0wv/3d-render-todo-check-list-with-ticks-task-test-removebg-preview.webp" />
                                                   <Heading color='var(--primary-color)' textAlign="center">SELECT A BOARD TO SEE THE DATA</Heading>
                                              </VStack>
                                         </Center>

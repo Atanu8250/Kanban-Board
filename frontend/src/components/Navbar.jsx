@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { FaTasks } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { MdAutoAwesome } from 'react-icons/md';
 import {
      Box,
      Button,
@@ -19,10 +20,15 @@ import {
      Select,
      Textarea,
      Input,
+     Spinner,
 } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import { useDispatch, useSelector } from 'react-redux';
 import useToastMsg from '../customHooks/useToastMsg';
-import { postTask } from '../redux/tasks/tasks.actions';
+import { postTask, generateDescriptionForTask } from '../redux/tasks/tasks.actions';
+
+// Motion wrapper for animated button
+const MotionButton = motion(Button);
 
 function Navbar() {
      const { data } = useSelector(store => store.tasksManager);
@@ -30,6 +36,7 @@ function Navbar() {
      const [subtasks, setSubtasks] = useState([""]);
      const dispatch = useDispatch();
      const toastMsg = useToastMsg();
+     const [isGenerating, setIsGenerating] = useState(false);
 
 
      const handleSubmit = (e) => {
@@ -52,6 +59,19 @@ function Navbar() {
      const handleAddSubTaskInput = () => {
           setSubtasks([...subtasks, ''])
      }
+
+         const handleGenerateDescCreate = async () => {
+              const titleEl = document.getElementById('title');
+              const descEl = document.getElementById('desc');
+              if (!titleEl || !titleEl.value) {
+                   toastMsg({ title: 'Task title is required', desc: 'Please enter a task name first', status: 'warning' })
+                   return;
+              }
+              setIsGenerating(true);
+              const generated = await dispatch(generateDescriptionForTask(titleEl.value));
+              if (generated && descEl) descEl.value = generated;
+              setIsGenerating(false);
+         }
 
      const handleChange = (e, i) => {
           let valueChangedSubTasks = [...subtasks];
@@ -98,7 +118,37 @@ function Navbar() {
                                         <Input id='title' type="text" required />
                                    </div>
                                    <div className='input-div'>
-                                        <label>Description</label>
+                                        <div style={{display: 'flex', alignItems: 'center', justifyContent: 'space-between'}}>
+                                             <label>Description</label>
+                                             <MotionButton
+                                                  isDisabled={isGenerating}
+                                                  onClick={handleGenerateDescCreate}
+                                                  size='xs'
+                                                  bg='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+                                                  color='white'
+                                                  _hover={!isGenerating ? {
+                                                       bg: 'linear-gradient(135deg, #764ba2 0%, #667eea 100%)',
+                                                       boxShadow: '0 0 20px rgba(102, 126, 234, 0.6)',
+                                                  } : {}}
+                                                  fontWeight='600'
+                                                  fontSize='xs'
+                                                  borderRadius='md'
+                                                  padding='4px 8px'
+                                                  title='Generate description with AI'
+                                             >
+                                                  {isGenerating ? (
+                                                       <>
+                                                            <Spinner size='xs' color='white' />
+                                                            <Text ml='2'>Generating...</Text>
+                                                       </>
+                                                  ) : (
+                                                       <>
+                                                            <MdAutoAwesome size={18} />
+                                                            <Text ml='1'>AI Generate</Text>
+                                                       </>
+                                                  )}
+                                             </MotionButton>
+                                        </div>
                                         <Textarea id='desc' cols="30" rows="3" required></Textarea>
                                    </div>
                                    <div className='input-div'>

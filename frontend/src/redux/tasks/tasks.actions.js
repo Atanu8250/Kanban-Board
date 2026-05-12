@@ -225,6 +225,45 @@ export const deleteTask = (taskId, boardId, toastMsg) => async (dispatch) => {
 }
 
 
+/**
+ * Generate a description for task (works for both create and edit modes).
+ * Returns the generated description string when successful.
+ */
+export const generateDescriptionForTask = (taskTitle) => async (dispatch) => {
+     if (!taskTitle) return null;
+
+     try {
+          const res = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/task/generate-description`, {
+               method: "POST",
+               body: JSON.stringify({ title: taskTitle }),
+               headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': sessionStorage.getItem("TOKEN"),
+               }
+          })
+          const data = await res.json();
+
+          if (res.status === 401) {
+               dispatch({ type: AUTH_LOGOUT })
+               alert(`Session Expired! \n Please Login again.. ${savedNavigate ? savedNavigate('/signin') : window.location.replace('/signin')}`)
+               return null;
+          }
+
+          if (res.ok) {
+               return data.description;
+          } else {
+               dispatch({ type: taskTypes.TASKS_ERROR, payload: data.message });
+               return null;
+          }
+
+     } catch (error) {
+          console.log('error:', error)
+          dispatch({ type: taskTypes.TASKS_ERROR, payload: error.message })
+          return null;
+     }
+}
+
+
 //! ================================ ACTIONS REGARDING SUBTASKS ================================
 
 /**

@@ -1,6 +1,7 @@
 const TaskModel = require('../models/task.model');
 const BoardModel = require('../models/board.model');
 const SubTaskModel = require('../models/subTask.model');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 
 const createTask = async (req, res) => {
@@ -88,4 +89,34 @@ const deleteTask = async (req, res) => {
 }
 
 
-module.exports = { createTask, updateTask, deleteTask };
+// Generate description for task using AI
+const generateDescriptionForTask = async (req, res) => {
+     const { title } = req.body;
+     try {
+          if (!title) {
+               res.status(400).send({ message: "Task title is required to generate description" });
+               return;
+          }
+
+          // Initialize Gemini AI (model can be configured via GEMINI_MODEL env)
+          const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+          const modelName = process.env.GEMINI_MODEL || "gemini-3-flash";
+          const model = genAI.getGenerativeModel({ model: modelName });
+
+          const prompt = `Generate a brief, professional, and concise description (2-3 sentences) for a task titled: "${title}".\nThe description should be clear and help understand what the task is about. Only provide the description text, nothing else.`;
+
+          const result = await model.generateContent(prompt);
+          const generatedDescription = result.response.text();
+
+          res.status(200).send({
+               message: "Description generated successfully",
+               description: generatedDescription
+          });
+     } catch (error) {
+          console.log('error in generateDescriptionForTask:', error);
+          res.status(500).send({ message: error.message, error });
+     }
+}
+
+
+module.exports = { createTask, updateTask, deleteTask, generateDescriptionForTask };
