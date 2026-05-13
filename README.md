@@ -26,6 +26,8 @@ It's a Full-Stack Individual Project developed within 2 Days
 ***
 ### :small_blue_diamond: Dashboard
 ![3](https://user-images.githubusercontent.com/94675329/233588276-91b9018e-604c-4503-b765-c7338aca9940.PNG)
+<img width="1824" height="1094" alt="Screenshot 2026-05-13 104844" src="https://github.com/user-attachments/assets/131d932c-d4e7-4622-a64b-8acb94393998" />
+
 
 ***
 ### :small_blue_diamond: Dashboard with Boards
