@@ -1,6 +1,6 @@
 <!-- https://user-images.githubusercontent.com/94675329/233132228-987af021-4518-44d1-a2b8-b83cbc109464.PNG -->
 # <img width="25px" src="https://notion-emojis.s3-us-west-2.amazonaws.com/prod/svg-twitter/1f4cb.svg"/> Kanban-Board (Full Stack Project)
-It's a Full-Stack Individual Project developed within 2 Days
+Kanban Board — A full-stack solo project built to showcase development skills. It is a task management platform that helps users organize and track tasks efficiently. The application includes AI-powered features such as generating tasks from natural language input and automatically creating task descriptions based on the task title.
 
 
 ## Teach-Stack
@@ -25,17 +25,19 @@ It's a Full-Stack Individual Project developed within 2 Days
 
 ***
 ### :small_blue_diamond: Dashboard
-![3](https://user-images.githubusercontent.com/94675329/233588276-91b9018e-604c-4503-b765-c7338aca9940.PNG)
 <img width="1824" height="1094" alt="Screenshot 2026-05-13 104844" src="https://github.com/user-attachments/assets/131d932c-d4e7-4622-a64b-8acb94393998" />
-
 
 ***
 ### :small_blue_diamond: Dashboard with Boards
-![4](https://user-images.githubusercontent.com/94675329/233588272-cf717dc7-f725-4be5-8695-1858c590a4a0.PNG)
+<img width="1826" height="914" alt="Screenshot 2026-05-13 104949" src="https://github.com/user-attachments/assets/5b80dcd5-7895-41d3-8b99-c86a655d68da" />
 
 ***
 ### :small_blue_diamond: Add Task Form
-![5](https://user-images.githubusercontent.com/94675329/233588270-a3492d4b-8752-4a73-becc-b44d629d59bc.PNG)
+<img width="1824" height="1144" alt="Screenshot 2026-05-13 105052" src="https://github.com/user-attachments/assets/b501c90c-ca5b-42fa-a593-7ae5f998cf92" />
+
+***
+### :small_blue_diamond: Create Task using AI
+<img width="1820" height="1252" alt="Screenshot 2026-05-13 105120" src="https://github.com/user-attachments/assets/b3ac9569-740d-4929-a611-159dfea982c1" />
 
 ***
 ### :small_blue_diamond: Task details
