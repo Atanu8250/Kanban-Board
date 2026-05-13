@@ -42,7 +42,7 @@ function Board() {
                     {
                          error.status ? (
                               <LazyLoadHandler>
-                                   <Center>
+                                   <Center w="100%">
                                         <Error>
                                              <Heading size="md">{error.message}</Heading>
                                         </Error>

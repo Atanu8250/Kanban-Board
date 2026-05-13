@@ -1,4 +1,5 @@
 import * as taskTypes from './tasks.types';
+import { AUTH_LOGOUT } from '../auth/auth.types';
 let abortController;
 
 /** 
@@ -227,10 +228,13 @@ export const deleteTask = (taskId, boardId, toastMsg) => async (dispatch) => {
 
 /**
  * Generate a description for task (works for both create and edit modes).
- * Returns the generated description string when successful.
+ * Returns a structured response so the UI can show errors like rate limits.
  */
-export const generateDescriptionForTask = (taskTitle) => async (dispatch) => {
-     if (!taskTitle) return null;
+export const generateDescriptionForTask = (taskTitle, toastMsg) => async (dispatch) => {
+     if (toastMsg) savedToastMsg = toastMsg;
+     else toastMsg = savedToastMsg;
+
+     if (!taskTitle) return { ok: false, message: 'Task title is missing' };
 
      try {
           const res = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/task/generate-description`, {
@@ -246,20 +250,84 @@ export const generateDescriptionForTask = (taskTitle) => async (dispatch) => {
           if (res.status === 401) {
                dispatch({ type: AUTH_LOGOUT })
                alert(`Session Expired! \n Please Login again.. ${savedNavigate ? savedNavigate('/signin') : window.location.replace('/signin')}`)
-               return null;
+               return { ok: false, message: 'Session expired' };
           }
 
           if (res.ok) {
-               return data.description;
+               return { ok: true, description: data.description };
           } else {
                dispatch({ type: taskTypes.TASKS_ERROR, payload: data.message });
-               return null;
+               toastMsg && toastMsg({
+                    title: data.message,
+                    status: res.status === 429 ? 'warning' : 'error'
+               });
+               return { ok: false, message: data.message };
           }
 
      } catch (error) {
           console.log('error:', error)
           dispatch({ type: taskTypes.TASKS_ERROR, payload: error.message })
-          return null;
+          toastMsg && toastMsg({
+               title: error.message,
+               status: 'error'
+          });
+          return { ok: false, message: error.message };
+     }
+}
+
+
+/**
+ * Create a task directly from a natural language prompt using Gemini AI.
+ * Returns the backend response when successful.
+ */
+export const createTaskFromPrompt = (boardId, prompt, toastMsg) => async (dispatch) => {
+     if (toastMsg) savedToastMsg = toastMsg;
+     else toastMsg = savedToastMsg;
+
+     if (!boardId || !prompt) return { ok: false, message: 'Board or prompt is missing' };
+
+     try {
+          const res = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/task/create-from-prompt/${boardId}`, {
+               method: 'POST',
+               body: JSON.stringify({ prompt }),
+               headers: {
+                    'Content-Type': 'application/json',
+                    'authorization': sessionStorage.getItem('TOKEN'),
+               }
+          });
+
+          const data = await res.json();
+
+          if (res.status === 401) {
+               dispatch({ type: AUTH_LOGOUT })
+               alert(`Session Expired! \n Please Login again.. ${savedNavigate ? savedNavigate('/signin') : window.location.replace('/signin')}`)
+               return { ok: false, message: 'Session expired' };
+          }
+
+          if (res.ok) {
+               dispatch(getTasks(boardId));
+               toastMsg && toastMsg({
+                    title: data.message,
+                    status: 'success'
+               });
+               return { ok: true, ...data };
+          }
+
+          dispatch({ type: taskTypes.TASKS_ERROR, payload: data.message });
+          toastMsg && toastMsg({
+               title: data.message,
+               status: 'warning'
+          });
+          return { ok: false, message: data.message };
+
+     } catch (error) {
+          console.log('error:', error);
+          dispatch({ type: taskTypes.TASKS_ERROR, payload: error.message });
+          toastMsg && toastMsg({
+               title: error.message,
+               status: 'error'
+          });
+          return { ok: false, message: error.message };
      }
 }
 

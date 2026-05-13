@@ -2,7 +2,7 @@ const TaskModel = require("../models/task.model");
 const SubTaskModel = require("../models/subTask.model");
 
 const createSubTask = async (req, res) => {
-     const subtasks = req.body;
+     let subtasks = req.body;
      const taskId = req.params.id;
      try {
           const task = await TaskModel.findById(taskId);
@@ -20,7 +20,7 @@ const createSubTask = async (req, res) => {
                }))
           } catch (error) {
                console.log('error in subtask creation:', error)
-               res.status(500).send({ mesesage: error.message, error });
+               res.status(500).send({ message: error.message, error });
                return;
           }
 
